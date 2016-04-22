@@ -1,0 +1,33 @@
+﻿<div id="buttons">
+
+</div>
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="Debug" next-screen-title="" translation="keyExit" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+<script type="text/javascript">
+    $(function () {
+        loadButtons();
+    });
+
+    function loadButtons() {
+        var fn = function (tx, rows) {
+            for (var i = 0; i < rows.length; i++) {
+                var name = rows[i]['name'];
+                var obj = $('<input type="button" onclick="questionController.startQuestionnaire(\'' + name + '\')" value="' + name + '" />')
+                $('#buttons').append(obj);
+            }
+        };
+
+        dbController.executeSql('SELECT DISTINCT EdiaryQuestionnaire as name FROM EdiaryQuestion', [], fn);
+    }
+
+</script>

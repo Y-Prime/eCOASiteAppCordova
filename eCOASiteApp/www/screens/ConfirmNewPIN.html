@@ -1,0 +1,98 @@
+﻿<fieldset data-role="controlgroup">
+    <legend translation="keyConfirmYourNewPIN">Confirm your new PIN.</legend>
+    <input id="ConfirmPin" type="password" class="med-width" placeholder="PIN" maxlength="4" />
+    <div class="numeric-pad" numeric-input="ConfirmPin"></div>
+</fieldset>
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <input id="BackButton" class="nav-button" translation="keyBack" type="button" value="Back" next-screen="EnterNewPIN" next-screen-title="" />
+            </td>
+            <td>
+                <input id="ExitButton" class="" type="button" value="Exit" translation="keyExit" onclick="exitPinScreen()"/>
+            </td>
+            <td>
+                <input class="" type="button" value="Next" translation="keyNext" onclick="changePin()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        setupScreen();
+    });
+
+    function setupScreen() {
+        if (patientController.getCurrentPatientIsTempPin()) {
+            //temporary pin reset
+            $('#BackButton').hide();
+            $('#ExitButton').attr('next-screen', 'Login').attr('next-screen-title', '');
+        } else {
+            //standard pin reset
+            //leave as is
+        }
+    }
+
+    function exitPinScreen() {
+        var screen = patientController.getExitChangePinScreen();
+        var title = patientController.getExitChangePinScreenTitle();
+        screenController.changeScreen(screen, title);
+    }
+
+    function changePin() {
+        var oldPIN = answers['EnterOldPIN.OldPin'];
+        var newPIN = answers['EnterNewPIN.NewPin'];
+        var confirmPIN = answers['ConfirmNewPIN.ConfirmPin'];
+
+        oldPIN = (Array.isArray(oldPIN)) ? oldPIN[0] : oldPIN;
+        newPIN = (Array.isArray(newPIN)) ? newPIN[0] : newPIN;
+        confirmPIN = (Array.isArray(confirmPIN)) ? confirmPIN[0] : confirmPIN;
+
+        var isTempPin = patientController.getCurrentPatientIsTempPin();
+
+        var message = patientController.validChangePIN(oldPIN, newPIN, confirmPIN);
+
+        if (message.length == 0) {
+            var fnSuccess = function () {
+                debugger;
+                var callback = patientController.getCurrentChangePinCallback();
+
+                function changePinSuccess() {
+                    var screenName = 'ChangePINSuccess';
+                    var title = '';
+
+                    screenController.changeScreen(
+                        screenName,
+                        title,
+                        null,
+                        null,
+                        function () { },
+                        { temporaryReset: true });
+
+                }
+
+                if (typeof callback == 'function') {
+                    callback(); 
+                    patientController.setCurrentChangePinCallback(null);
+                } else {
+                    changePinSuccess();
+                }
+                // patientController.checkForEnrollment(onSuccess, onerror);
+            };
+
+            patientController.getCurrentPatient().updatePIN(confirmPIN, fnSuccess, null);
+        } else {
+            screenController.setSavedControlValue($('#ConfirmPin'), 'ConfirmNewPIN', '');
+            app.alert(message);
+            function resetValue() {
+                screenController.setSavedControlValue($('#NewPin'), 'EnterNewPIN', '');
+            }
+            //changeScreen: function (screenName, title, backgroundCSS, contentDivOverloadObject, onSuccess, pars)
+            screenController.changeScreen('EnterNewPIN', '', null, null, resetValue, null);
+        }
+    }
+
+</script>

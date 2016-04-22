@@ -1,0 +1,40 @@
+﻿
+<div class="inner-content">
+    <input class="full-width" type="button" value="Change Reminder Alert" onclick="startTrainingQuestionnaire()" translation="keyTraining" />
+    <input class="full-width" type="button" value="Change Reminder Alert" onclick="startPracticeDiary()" translation="keyPracticeDailyDiary" />
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="Main" next-screen-title="keySubjectMainMenu" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    function startTrainingQuestionnaire() {
+        //only save the responses when the user has completed training
+        questionController.startQuestionnaire('Training', null, patientController.getCurrentPatient().IsTrainingComplete, completeTrainingQuestionnaire);
+    }
+
+    function completeTrainingQuestionnaire(callback) {
+        //check for training
+        patientController.getCurrentPatient().completeTraining(callback);
+    }
+
+    function startPracticeDiary() {
+        //function practiceDiaryComplete() {
+        //    screenController.changeScreen('Training', '');
+        //}
+
+        questionController.startQuestionnaire('Daily_Diary', null, true, null, true, 'Training','');
+    }
+
+</script>
+

@@ -1,0 +1,38 @@
+﻿<div class="inner-content">
+    <h1 translation="k_PageDescription">
+        Page Description
+    </h1>
+    <p translation="k_Templage">
+        Use this template to create a simple screen with buttons in the footer.
+    </p>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="Main" next-screen-title="k_SubjectMainMenu" translation="k_Exit"/>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<!--
+*********************************************
+* Developer Notes
+*********************************************
+
+NAVIGATION BUTTONS
+    add the nav-button class, next-screen and next-screen-title attributes to an html object
+    next screen is the name of the /screens/####.html file. ie Main references Main.html
+    next-screen-title is the title to be displayed on the page. NOTE: this should be a translation key. It will translate after change screen
+
+    
+TRANSLATIONS:
+    add a translation attribute to an html tag and it will translate to the current subject language
+    add a translation-language attribute to force an specific language for the translation
+
+-->

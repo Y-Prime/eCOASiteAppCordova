@@ -1,0 +1,76 @@
+﻿<div class="inner-content standard-padding">
+    <h1 translation="keyAbout">About</h1>
+    <table>
+        <tr>
+            <td>
+                <label translation="keySubjectID"></label>
+                
+            </td>
+            <td>
+                <label id="subjectIdLabel">0000000</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label translation="keyStudyNumber"></label>
+            </td>
+            <td>
+                <label id="studyNumberLabel">0000000</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label translation="keySoftwareVersion"></label>
+            </td>
+            <td>
+                <label id="softwareVersionLabel">0000000</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label id="unsentDataLabel">0000000</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <a href="#" class="nav-button" next-screen="YPrimeSupport" next-screen-title="" translation="keyPrimeSupportInfo">[Prime Support Info]</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Tools" next-screen-title="keyToolsMenu" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+
+<script type="text/javascript">
+    $(function () {
+        var subjectID = patientController.getCurrentPatient().PatientNumber;
+        var studyID = STUDY_NUMBER;
+        var softwareVersionID = SOFTWARE_VERSION;
+        //var unsentData = true;
+
+        $('#subjectIdLabel').html(subjectID);
+        $('#studyNumberLabel').html(studyID);
+        $('#softwareVersionLabel').html(softwareVersionID);
+
+        function checkUnsent(tx, rows) {
+            var unsentData = rows.length > 0;
+            var unsentDataHtml = translationController.get('keyUnsentData');
+            var noUnsentDataHtml = translationController.get('keyNoUnsentData');
+
+            $('#unsentDataLabel').html(unsentData ? unsentDataHtml : noUnsentDataHtml);
+        }
+
+        questionController.getUntransmittedEntries(checkUnsent);
+    });
+</script>

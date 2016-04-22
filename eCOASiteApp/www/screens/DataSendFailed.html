@@ -1,0 +1,23 @@
+﻿<div class="inner-content">
+    <div class="question-text-wrapper h-center">
+        <h3 translation="keyDataSendingFailed"></h3>
+        <p translation="keyDataSavedOnDevice"></p>
+    </div>
+    <input class="nav-button full-width" type="button" value="Troubleshooting" translation="keyTroubleshooting" next-screen="Troubleshooting" next-screen-title="keyTroubleshooting" />
+    <input class="nav-button full-width" type="button" value="Try Again" translation="keyTryAgain" next-screen="DataSavedTransmit" next-screen-title="" />
+    <input class="nav-button full-width" type="button" value="Try Later" translation="keyTryLater" onclick="goToHomeScreen()" />
+</div>
+
+<footer>
+    <table></table>
+</footer>
+
+<script type="text/javascript">
+    function goToHomeScreen() {
+        if (app.getSiteBasedMode()) {
+            screenController.changeScreen('VisitQuestionnaires', '');
+        } else {
+            screenController.changeScreen('Main', 'keySubjectMainMenu');
+        }
+    }
+</script>

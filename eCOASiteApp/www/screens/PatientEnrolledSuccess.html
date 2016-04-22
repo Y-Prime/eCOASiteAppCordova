@@ -1,0 +1,32 @@
+﻿<div class="inner-content">
+    <div class="instruction-text" translation="keyCongratulationsYouHaveEnrolled">
+    </div>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input id="enrolledButton" class="nav-button" type="button" value="Okay" translation="keyOK" onclick="completeEnrollment()" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    function completeEnrollment() {
+        //check for any previously set enrollment callbacks
+        var callback = patientController.getCurrentEnrollmentCallback();
+        if (typeof callback != 'function') {
+            callback = function () {
+                screenController.changeScreen('SiteMain', '');
+            };
+        }
+        patientController.setCurrentEnrollmentCallback(null);
+        callback();
+    }
+</script>
+

@@ -1,0 +1,85 @@
+﻿<div class="inner-content">
+    <fieldset data-role="controlgroup">
+        <legend translation="keySelectReminderTime"></legend>
+        <select id="DiaryTime"></select>
+    </fieldset>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <input class="nav-button" id="backButton" type="button" value="Back" translation="keyBack" next-screen="SelectReminderType" next-screen-title="" />
+            </td>
+            <td>
+              
+            </td>
+            <td>
+                <input type="button" value="Next" translation="keyNext" onclick="successReminderType()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    var enrolling = false;
+
+    $(function () {
+        createReminderTimes();
+        $('#backButton').attr('next-screen', screenController.lastScreenViewed().screenName)
+
+        var fn = function (cnt) {
+            enrolling = cnt == 0;
+        };
+
+        reminderController.getReminderCount(currentSubjectNumber, fn, null);
+    });
+
+    function createReminderTimes() {
+        var obj = $('#DiaryTime');
+        var txt = '';
+        //6pm to 10am???
+        for (var i = 18; i < 24; i++) {
+            addOptionToSelect(obj, (i - 12) + " PM", i);
+        }
+        for (var i = 0; i < 11; i++) {
+            addOptionToSelect(obj, (i == 0 ? "12" : i) + " AM", i);
+        }
+    }
+
+    function addOptionToSelect(obj, txt, val) {
+        var obj = (typeof obj == "object") ? obj : $(obj);
+        $(obj).append('<option value="' + val + '">' + txt + '</option>');
+    }
+
+    function successReminderType() {
+        var reminderHour = $('#DiaryTime').val();
+        if (validScreen(reminderHour)) {
+            reminderController.currentSelectedReminder.ReminderHour = reminderHour;
+            reminderController.currentSelectedReminder.ReminderMinute = 0;
+
+            //call a generic success screen??
+            function onSuccess() {
+                var screenName = enrolling ? "EnrollmentSuccess" : "UpdateReminderSuccess";
+                var title = "";
+
+                screenController.changeScreen(screenName, title);
+            }
+
+            function onFail() {
+                screenController.changeScreen(screenName, title);
+            }
+
+
+            reminderController.updateReminder(onSuccess, onFail);
+           
+       } else {
+            app.alert(translationController.get('keyReminderTimeRequired'));
+        }
+    }
+
+    function validScreen(val) {
+        return isNumeric(val) && parseInt(val) >= 0;
+    }
+</script>

@@ -1,0 +1,106 @@
+﻿
+<div id="nav"  data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+       
+    </h5>
+  
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right" ></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="subject-panel">
+    <h1 translation="keySelectSubject">Select a Subject</h1>
+    <div id="patients-div rater-forms">
+        <ul id="patient-list" data-role="listview"></ul>
+    </div>
+</div>
+
+<footer data-role="footer" data-position="fixed" class="nav-footer">
+   
+    <h5 class="left">
+        <button class="nav-button" type="button" value="Exit" next-screen="UserLogin" next-screen-title="" translation="keyExit" onClick="gotoLogin()">
+            <!--  <input class="nav-button" type="button" value="Exit" next-screen="UserLogin" next-screen-title="" translation="keyExit" />-->
+            <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+        </button>
+     </h5>
+    <h5 class="right">
+        <button class="btn-nav" type="button" value="Next" onclick="gotoNavigationSelection()" translation="keyNext">          
+            <!--  <input type="button" class="btn-nav" value="Next" translation="keyNext" onclick="gotoNavigationSelection()" />-->
+            Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>
+        </button>
+       </h5>
+</footer>
+
+<script type="text/javascript">
+    var selectedCss = 'li-selected';
+
+    $(function () {
+        patientController.setCurrentPatient(null);     
+        
+
+        function gotPatients(tx, rows) {
+            var list = $('#patient-list');
+
+            function createPatientChoice(row) {
+                //<li><a href="bmw.html">BMW</a></li>
+                var opt = uiController.createControl('li', { id: "patient-" + row.Id, "class": "patient-li" });
+                var anchor = uiController.createControl('a', { href: '#' });
+                $(anchor).bind('tap', function () { selectPatient(row); });
+                $(anchor).html(row.EnrolledId);
+               // $(anchor).html(row.EnrolledId +'<i class="ui-icon-fa ui-icon-fa-user icon60"></i>');
+                opt.appendChild(anchor);
+
+                return opt;
+            }
+
+            for (var i = 0; i < rows.length; i++) {
+                //var patientNumber = rows[i].EnrolledId;
+                list.append(createPatientChoice(rows[i]));
+            }
+            //debugger;
+          //  $(list).listview('refresh');
+            //screenController.refreshHTMLObjectJQM('patients-div');
+        }
+
+        //step outside for first time load up
+        function loadPatients() {
+            patientController.getAllPatients(gotPatients);
+        }
+
+        setTimeout(loadPatients, 1000);
+    });
+
+    function selectPatient(obj) {
+        patientController.setCurrentPatient(new Patient(obj));
+        $('.' + selectedCss).each(
+            function () {
+                $(this).removeClass(selectedCss);
+            });
+        $('#patient-' + obj.Id).addClass(selectedCss);
+    }
+
+    function gotoNavigationSelection() {
+        if (patientController.getCurrentPatient() != null) {
+            function gotoVisitsCallback() {
+                screenController.changeScreen('SelectFunction', '')
+            }
+
+            patientController.syncQuestionnaires(patientController.getCurrentPatient().Id, gotoVisitsCallback);
+        } else {
+            var message = translationController.get('keyPleaseSelectSubject');
+            app.alert(message);
+        }
+    }
+
+    function gotoLogin() {
+        screenController.changeScreen("UserLogin", "");
+    }
+</script>

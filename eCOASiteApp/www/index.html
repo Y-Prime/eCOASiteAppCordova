@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+     <!--
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src *;          
+                      style-src * 'self' 'unsafe-inline' 'unsafe-eval';
+                      script-src * 'self' 'unsafe-inline' 'unsafe-eval';">-->
+   
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.css" rel="stylesheet" />    
+
+ 
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/Custom.css" rel="stylesheet" />
+    <!-- Third Party-->
+
+    <script src="scripts/jquery-1.8.0.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.js"></script>
+    <script src="scripts/moment.min.js"></script>
+    <script src="scripts/base64.js"></script>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="scripts/platformOverrides.js"></script>
+    <!-- Global modules-->
+    <script src="scripts/yprime/var.js"></script>
+    <script src="scripts/yprime/utilities.js"></script>
+    <script src="scripts/yprime/updateAPK.js"></script>
+    <!-- controller base modules-->
+    <script src="scripts/yprime/controllers/screenController.js"></script>
+    <script src="scripts/yprime/controllers/dbController.js"></script>
+    <script src="scripts/yprime/controllers/fileController.js"></script>
+    <script src="scripts/yprime/controllers/serviceController.js"></script>
+    <script src="scripts/yprime/controllers/translationController.js"></script>
+    <script src="scripts/yprime/controllers/uiController.js"></script>
+    <script src="scripts/yprime/controllers/customScreenController.js"></script>
+
+    <!---db modules-->
+    <script src="scripts/yprime/controllers/reminderController.js"></script>
+    <script src="scripts/yprime/controllers/patientController.js"></script>
+    <script src="scripts/yprime/controllers/questionController.js"></script>
+    <script src="scripts/yprime/controllers/siteUserController.js"></script>
+    <script src="scripts/yprime/controllers/visitController.js"></script>
+
+    <!-- objects-->
+    <script src="scripts/yprime/objects/BaseObjectClass.js"></script>
+    <script src="scripts/yprime/objects/Patient.js"></script>
+    <script src="scripts/yprime/objects/Reminder.js"></script>
+    <script src="scripts/yprime/objects/Question.js"></script>
+
+    <!-- screen scripts-->
+    <script src="scripts/yprime/scripts/questionLoadUp.js"></script>
+
+    <script src="scripts/yprime/app.js"></script>
+
+
+    <title>eCOA Site App</title>
+</head>
+<body>
+    <div class="splash">
+        <!--<img src="res/img/spinner-large.gif" />-->
+    </div>
+    <div id="main-content" class="standard-padding">
+        <div>
+            <h1>Y-PRIME</h1>
+            DEVICE IS LOADING...
+        </div>
+    </div>
+    <!--<footer id="main-footer" class="main-footer">
+        <div>
+            YPrime ePRO &copy; 2016
+        </div>
+    </footer>  -->
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>

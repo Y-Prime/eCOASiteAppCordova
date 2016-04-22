@@ -1,0 +1,26 @@
+﻿<div class="inner-content">
+    <div class="instruction-text" translation="keyChangePinSuccess">
+    </div>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input id="homeButton" class="nav-button" type="button" value="Okay" translation="keyOK" next-screen="Tools" next-screen-title="" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        var pars = screenController.getScreenParameters();
+        if (pars['temporaryReset']) {
+            $('#homeButton').attr('next-screen', 'Main').attr('next-screen-title', 'keySubjectMainMenu');
+        }
+    });
+</script>

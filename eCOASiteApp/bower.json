@@ -1,0 +1,6 @@
+{
+  "name": "eCOASiteApp",
+  "dependencies": {
+    "js-base64": "~2.1.9"
+  }
+}

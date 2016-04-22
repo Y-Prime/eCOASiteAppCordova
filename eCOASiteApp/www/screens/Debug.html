@@ -1,0 +1,57 @@
+﻿<input class="nav-button med-width" type="button" value="DB Debug" next-screen="DataDebug" next-screen-title="" />
+<input class="nav-button med-width" type="button" value="View Logs" next-screen="LoggingDebug" next-screen-title="" />
+<input class="nav-button med-width" type="button" value="View Scales" next-screen="ScalesDebug" next-screen-title="" />
+<input class="med-width" type="button" value="Transmit Unsent Entries" onclick="transmit()" />
+<input class="med-width" type="button" value="Transmit Unsent Patients" onclick="transmitPatients()" />
+<input class="med-width" type="button" value="Transmit Unsent Data" onclick="transmitAll()" />
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="main" next-screen-title="" translation="keyExit" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    function transmit() {
+        var onSuccess = function () {
+            screenController.changeScreen('DataSentSuccessfully', '');
+        };
+
+        var onError = function () {
+            alert('fail');
+            screenController.changeScreen('DataSendFailed', '');
+        };
+
+        questionController.transmitUnsentEntries(onSuccess, onError);
+    }
+
+    function transmitPatients() {
+        var onSuccess = function () {
+            screenController.changeScreen('DataSentSuccessfully', '');
+        };
+
+        var onError = function () {
+            screenController.changeScreen('DataSendFailed', '');
+        };
+
+        patientController.transmitPatientInformation(onSuccess, onError);
+    }
+
+    function transmitAll() {
+        var onSuccess = function () {
+            screenController.changeScreen('DataSentSuccessfully', '');
+        };
+
+        var onError = function () {
+            screenController.changeScreen('DataSendFailed', '');
+        };
+
+        app.syncAnswers(onSuccess, onError);
+    }
+</script>

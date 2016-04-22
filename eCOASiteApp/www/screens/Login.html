@@ -1,0 +1,157 @@
+﻿<div id="logo" class="h-center">
+    <img src="res/img/user_login_logo.png" />
+</div>
+<h2 translation="keyLogin">Login</h2>
+<form>
+    <input id="subjectID" name="subjectID" class="full-width" type="number" placeholder="Subject ID" maxlength="8" translation="keySubjectID" value="" />
+    <input id="subjectPin" name="subjectPin" class="full-width" type="password" placeholder="PIN" maxlength="20" translation="keyPIN" value="" onfocus="changeInputHandler(false)" onblur="changeInputHandler(true);"/>
+   <!-- $('#subjectLogin').click()-->
+     <input id="subjectLogin" name="subjectLogin" class="" type="button" value="Login" translation="keyLogin" />
+    <div class="h-center margin-top-standard">
+        <a id="forgotPin" name="forgotPin" class="nav-button full-width" href="#" next-screen="ForgotPIN" next-screen-title="keyForgotPIN" translation="keyForgotPIN">Forgot PIN</a>
+    </div>
+    <!--<input id="addPatient" type="button" onclick="addPatientClick()" value="Add Patient" />-->
+    <div class="sub-footer">
+        <table class="full-width">
+            <tr>
+                <td class="third-width" align="right">
+                    <label translation="keyPoweredBy"></label>
+                </td>
+                <td class="third-width" align="center">
+                    <img class="thumb" src="./images/user_login_logo.png" />
+                </td>
+                <td class="third-width">
+                    <label>
+                        <label class="bold left" translation="keyVersion"></label>
+                        <label class="bold left" id="versionNumber"></label>
+                    </label>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </div>
+    <div class="clear"></div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $('#subjectLogin').bind('click', loginSubject);
+        if (!app.getSiteBasedMode()) {
+            patientController.logout();
+        }
+        $('#versionNumber').html('&nbsp;' + app.getVersion());
+
+       // $('#subjectPin').val('');
+        //debug!!!!
+        if (DEBUGMODE) {
+            //$('#subjectID').val('9999');
+            //$('#subjectPin').val('1234');
+        }
+
+        var currentPatient = patientController.getCurrentPatient();
+        $('#subjectID').val(currentPatient.PatientNumber);
+       
+    });
+
+    function loginSubject() {
+        var subjectID = $('#subjectID').val();
+        var pin = $('#subjectPin').val();
+
+        //validate
+        if (validLoginForm(subjectID, pin)) {
+            //display error or navigate to main
+            function fnSuccessfulLogin() {
+                //this handles login control from the questionnaires
+                var callback = patientController.getCurrentLoginCallback();
+                if (typeof callback == 'function') {
+                    callback();
+                    patientController.setCurrentLoginCallback(null);
+                } else {
+                    screenController.changeScreen('Main', 'keySubjectMainMenu');
+                }
+            }
+            function onFail() {
+                $('#subjectPin').val('');
+            }
+            
+            function onError() {
+                app.alert(translationController.get('keyError'));
+            }
+
+            patientController.login(subjectID, pin, fnSuccessfulLogin, onFail, onError)
+        }
+    }
+
+    function validLoginForm(subjectID, pin) {
+        var result = true;
+        if (subjectID.length == 0 || pin.length == 0) {
+            result = false;
+            $('#subjectPin').val('');
+            patientController.failedLoginHandler();
+        }
+        return result;
+    }
+
+    function changeInputHandler(isPassword) {
+        setTimeout(function () {
+            var obj = document.getElementById("subjectPin");
+            
+            if (typeof obj != 'undefined' && obj != null) {
+                obj.setAttribute("type", (isPassword ? "password" : "number"));
+            }
+        }, 1);
+    }
+
+    function addPatientClick() {
+        var subjectID = $('#subjectID').val();
+        var pin = $('#subjectPin').val();
+
+        if (validLoginForm(subjectID, pin) && subjectID.length > 0) {
+            var p = new Patient({
+                PatientNumber: subjectID,
+                Pin: pin,
+                IsTempPIN: "true",
+                PhoneNumber: "215-123-4567",
+                SiteId: "Site01",
+                NextVisit: "BL",
+                BLDate: "01/01/2015",
+                Transmitted: "true"
+            }).insertUpdate();
+        }
+    }
+
+
+    function setLanguage() {
+        var lang = $('#language  option:selected').val();
+        if (lang != '') {
+            translationController.setDefaultLanguageId(lang);
+            screenController.changeScreen('Login', '');
+        }
+    }
+
+    function getPatient() {
+        var p = '9999';
+        var pin = '1234';
+        var url = SERVER_URL + 'api/patient/login';
+
+        var fn = function (e) { alert('done inload'); };
+        questionController.loadQuestionsFromService(fn, fn);
+        //serviceCalls.getPatientFromAPI(p, pin, function (e) { alert(JSON.stringify(e));});
+    }
+    /*
+    BOOTSTRAP CODE - does not mix with jqm
+    <input id="subjectID" name="subjectID" class="form-control" type="text" placeholder="Subject ID" maxlength="4" />
+    <input id="subjectPin" name="subjectPin" class="form-control" type="password" placeholder+="PIN" maxlength="20" />
+    <input id="subjectLogin" name="subjectLogin" class="btn btn-primary btn-lg btn-block" type="button" value="Login" />
+    */
+</script>
+<!-- debugging-->
+<!--<select id="language" onchange="setLanguage()">
+    <option value=""></option>
+    <option value="en-us">English</option>
+    <option value="en-es">Spanish</option>
+    <option value="zh-cn">Chinese</option>
+</select>-->
+<!--<input type="button" onclick="addPatient()" value="Add Patient [DEBUG]" />-->

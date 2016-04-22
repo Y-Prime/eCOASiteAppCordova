@@ -1,0 +1,45 @@
+﻿<div class="inner-content">
+    <fieldset data-role="controlgroup">
+        <legend translation="keyEnterYourPhoneNumber">Enter your phone number:</legend>
+        <input id="phoneNumber" type="number" maxlength="10" class="med-width" placeholder="XXX" translation="keyPhonePlaceholder" />
+       
+    </fieldset>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <input class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="" />
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                <input class="" type="button" value="Next" onclick="savePhoneNumber()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+    });
+
+    function savePhoneNumber() {
+        var reminderValue = $('#phoneNumber').val();
+        if (validScreen(reminderValue)) {
+            reminderController.currentSelectedReminder.ReminderValue = reminderValue;
+            var nextScreen = "SelectReminderTime";
+            var title = "";
+            screenController.changeScreen(nextScreen, title, null, null, null)
+        } else {
+            app.alert(translationController.get('keyPhoneNumberRequired'));
+        }
+    }
+
+    function validScreen(val) {
+        return val.length > 0;
+    }
+</script>

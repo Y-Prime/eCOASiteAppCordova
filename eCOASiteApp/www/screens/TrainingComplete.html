@@ -1,0 +1,64 @@
+﻿<div class="question-text-wrapper">
+    <div translation="keyTrainingComplete"></div>
+</div>
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <!--<button id="QuestionBackButton" class="" type="button" value="Exit" translation="keyBack">
+                    <span>[Back]</span><i class="fa fa-angle-left fa-2x left-icon"></i>
+                </button>-->
+            </td>
+            <td>
+                <input id="QuestionOkButton" class="" type="button" value="OK" translation="keyOK" onclick="completeTraining()" />
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        loadTrainingCompletePage();
+    });
+
+    function loadTrainingCompletePage() {
+        var pars = screenController.getScreenParameters();
+        var questionPage = questionController.getLoadedQuestionPage(pars.typename, pars.sortorder);
+        var question = questionPage[0]; //TODO: this might be problematic
+
+       // setUpNavigationButtons(question);
+    }
+
+    function completeTraining() {
+        //function checkForPracticeDiary(callback) {
+        //    var title = '';
+        //    var message = translationController.get('keyCompletePracticeDiary');
+
+        //    function confirmPractice(idx) {
+        //        $('#main-content').removeClass('training-border');
+        //        switch (idx) {
+        //            case 1:
+        //                //fix the back button on the second questionnaire
+        //                screenController.addScreenViewed('Main', 'keySubjectMainMenu');
+        //                questionController.startQuestionnaire('Daily_Diary', null, true, null, true);
+        //                break;
+        //            default:
+        //                screenController.changeScreen('Main','keySubjectMainMenu');
+        //                break;
+        //        }
+
+
+        //    }
+
+        //    pgConfirm(message, confirmPractice, title, [translationController.get('keyyes'), translationController.get('keyno')]);
+        //    //I am specifically not calling this to control the navigation from the choice
+        //    //callback();
+        //}
+
+        patientController.checkForPracticeDiary();
+    }
+
+</script>

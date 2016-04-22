@@ -1,0 +1,46 @@
+﻿<div class="inner-content">
+    <input class="nav-button full-width" type="button" value="About" translation="keyAbout" next-screen="About" next-screen-title="" />
+    <input class="full-width" type="button" value="Change Reminder Alert" translation="keyChangeReminderAlert" onclick="changeReminderAlert()" />
+    <input class="nav-button full-width" type="button" value="Change PIN---" translation="keyChangePIN" next-screen="EnterOldPIN" next-screen-title="" />
+    <input class="nav-button full-width" type="button" value="Terms Of Use" translation="keyTermsOfUse" next-screen="TermsOfUse" next-screen-title="" />
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Main" next-screen-title="keySubjectMainMenu" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        screenController.clearInputDefaults();
+    });
+
+    function changeReminderAlert() {
+        var fnSuccess = function () {
+            var nextScreen = "SelectReminderType";
+            var title = "";
+            
+            currentReminder.loadCurrentSelectedReminderToDefaults();
+            screenController.changeScreen(nextScreen, title, null, null, function () { });
+        };
+
+        currentReminder = new Reminder({});
+        currentReminder.get(currentSubjectNumber, reminderName, fnSuccess);
+        
+        /*
+        reminderController.getReminders(currentSubjectNumber, reminderName, function () {
+            reminderController.loadCurrentSelectedReminderToDefaults();
+            //check for initial setup to know the mode
+            screenController.changeScreen(nextScreen, title, null, null, function () { });
+        });
+        */
+    }
+</script>

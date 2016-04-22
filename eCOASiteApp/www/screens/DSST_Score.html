@@ -1,0 +1,396 @@
+﻿
+<style type="text/css">
+    body {
+        background-color: #dddddd;
+        font-family: Arial;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    button {
+        font-size: 1.5em;
+    }
+
+    #content-wrapper {
+        width: 100%;
+    }
+
+    #content {
+        width: 100%;
+        margin: 0px auto;
+        background-color: #ffffff;
+        /*border: 1px solid #808080;*/
+        /*margin: 2em;*/
+        position: relative;
+    }
+
+    #dsst-frame {
+        padding: 0em;
+        border: 0px none #dddddd;
+    }
+
+        #dsst-frame div {
+            margin: 0em 0em;
+        }
+
+    #dsst-middle {
+        height: 8em;
+        margin: 1em 0em !important;
+    }
+
+    #dsst-keys {
+        border-collapse: collapse;
+        font-size: 2em;
+        margin: 0px auto;
+        width: 100%;
+    }
+
+        #dsst-keys, #dsst-keys td, #dsst-question, #dsst-question td {
+            border: 1px solid #dddddd;
+            padding: .2em;
+            text-align: center;
+        }
+
+    #button-table {
+        /*font-size: 4em;*/
+        border-collapse: collapse;
+        margin: 0px auto;
+    }
+
+        #button-table td {
+            border: 0px none #dddddd;
+        }
+
+    #dsst-question {
+        font-size: 1.8em;
+        border-collapse: collapse;
+        margin: 0.2em auto;
+    }
+
+        #dsst-question tr, #button-table tr {
+            height: 2em;
+        }
+
+        #dsst-question td, #button-table td {
+            width: 1.5em;
+        }
+
+    #dsst-buttons {
+        float: left;
+        font-size: 2em;
+        margin: 0px auto;
+        width: 100%;
+    }
+
+        #dsst-buttons a, #button-table a {
+            border: 1px solid black;
+            padding: 1.25em;
+            background-color: #b0b0b0;
+            text-decoration: none;
+            color: #000000;
+            margin-right: 0.5em;
+            width: 0.5em;
+            font-size: 1.5em;
+        }
+
+            #dsst-buttons a:last-child {
+                margin-right: 0px !important;
+            }
+
+    .clear {
+        clear: both;
+    }
+
+    #score {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        font-size: 1.5em;
+    }
+
+    .button-div button {
+        float: left;
+        margin-right: 1em;
+    }
+
+    #dsst-complete {
+        text-align: center;
+        padding: 2em;
+        font-size: 2em;
+    }
+</style>
+
+<div id="content-wrapper">
+    <div id="content">
+        <div id="dsst-frame">
+            <div>
+                <table id="dsst-keys"></table>
+            </div>
+            <div id="dsst-middle">
+                <table id="dsst-question">
+                    <tr>
+                        <td>
+                            <span id="currentNumber"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span id="currentIcon"></span></td>
+                    </tr>
+                </table>
+                <div>
+                    <button id="startTest" onclick="startTest()">Start Test</button>
+                </div>
+            </div>
+            <div class="button-div">
+                <table id="button-table"></table>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="dsst-complete">
+            <div translation="keyDSSTComplete"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var icons = [
+        'fa-circle-o-notch',
+        'fa-hourglass-o',
+        'fa-i-cursor',
+        'fa-minus-square-o',
+        'fa-bars',
+        'fa-neuter',
+        'fa-jpy',
+        'fa-chevron-up',
+        'fa-arrow-left',
+    ];
+
+    var numCorrect;
+    var numIncorrect;
+    var currentNumberValue;
+    var timeBetweenQuestionsMilliseconds = 500;
+    var testTimeoutMilliseconds = 90 * 1000; //1.5 minutes
+    var screenValueInProgress = 'DSSTInProgress';
+    screenController.setScreenValue(screenValueInProgress, false);//use this global to control the popup
+
+    $(function () {
+        init();
+    });
+
+    /*****************************
+    * Initialization
+    *****************************/
+    function init() {
+        //loadQuestionPage();
+        //assembla 226 - remove the alert so user cannot click outside of ok button -jo 02Feb2016
+        $('#dsst-complete').hide();
+        showDSSTQuestion(false);
+        setKeys();
+    }
+
+    function setKeys(shuffle) {
+        var tbl = $('#dsst-keys');
+        var buttonTbl = $('#button-table');
+        var topRow = createControl('tr');
+        var bottomRow = createControl('tr');
+        var buttonRow = createControl('tr');
+
+        var buttonDiv = $('#dsst-buttons');
+        var buttons = new Array(9);
+
+        //clear the objects
+        $(tbl).empty();
+        $(buttonDiv).empty();
+        $(buttonTbl).empty();
+
+        for (var i = 1; i <= 9; i++) {
+            var icon = icons[i - 1];
+            $(topRow).append(createKeyCell(i, ''));
+            var iconCell = createKeyCell('', '');
+            $(iconCell).append(createControl('i', { "class": 'fa ' + icon }))
+            $(bottomRow).append(iconCell);
+
+            var j = 0;
+            var saved = false;
+            while (!saved) {
+                var pos = shuffle ? getRandomNumberBase(0, 9) : i;
+
+                if (buttons[pos] == undefined) {
+                    buttons[pos] = createSelectCell(i, icon);//createSelectButton(i, icon);
+                    saved = true;
+                }
+                j++;
+                if (j > 1000) {
+                    saved = true;
+                }
+            }
+        }
+
+        //randomize the buttons
+        for (var i = 0; i < buttons.length; i++) {
+            //buttonDiv.append(buttons[i]);
+            $(buttonRow).append(buttons[i])
+        }
+
+        $(tbl).append($(topRow));
+        $(tbl).append($(bottomRow));
+        $(buttonTbl).append($(buttonRow));
+    }
+
+    function createKeyCell(txt, css) {
+        var numCell = createControl('td', { "class": css });
+        $(numCell).html(txt);
+        return numCell;
+    }
+
+    function createSelectCell(val, icon) {
+        var numCell = createControl('td', {});
+        $(numCell).append($(createSelectButton(val, icon)));
+        return numCell;
+    }
+
+    function createSelectButton(val, icon) {
+        var btn = createControl('a', {
+            href: "#",
+            "key-val": val,
+            "class": 'fa ' + icon//,
+            //onclick: "buttonHandler(this)"
+        });
+
+        //this didn't work
+        $(btn).bind('touchstart', function () { buttonHandler(this); })
+
+        return btn;
+    }
+
+    /******************************
+    * Scale Control
+    ******************************/
+    function startTest() {
+        $('#startTest').hide();
+
+        numCorrect = 0;
+        numIncorrect = 0;
+        showCount();
+
+        //kick off the timer
+        getKeyQuestion();
+        screenController.setScreenValue(screenValueInProgress, true);//use this global to control the popup
+        startTimer();
+    }
+
+    function startTimer() {
+        setTimeout(completeTest, testTimeoutMilliseconds);
+    }
+
+    function getKeyQuestion() {
+        showDSSTQuestion(false);
+        displayKeyQuestion(getRandomNumber());
+        showDSSTQuestion(true);
+    }
+
+    function displayKeyQuestion(num) {
+        setCurrentNumberValue(num);
+        setCurrentIconValue('');
+    }
+
+    function completeTest() {
+        //set the value for the question
+        //check if the patient has left the screen
+        if (screenController.getScreenValue(screenValueInProgress) == true) {
+            customScreenController.setQuestionValue(numCorrect);
+            //var message = translationController.get('keyDSSTComplete');
+            //app.alert(message);
+            //assembla #226 - disable click  on ok button - jo 02Feb2016
+            $('#dsst-frame').hide();
+            $('#dsst-complete').show();
+
+
+            //alert('Test is completed! ' + getCorrect() + ' correct, ' + getInCorrect() + ' incorrect in ' + (testTimeoutMilliseconds / 1000) + ' seconds.');
+            //$('#startTest').show();
+            showDSSTQuestion(false);
+            screenController.setScreenValue(screenValueInProgress, false);
+        }
+    }
+
+    function buttonHandler(obj) {
+        var val = $(obj).attr('key-val');
+        var icon = icons[parseInt(val) - 1];
+        setCurrentIconValue(icon);
+        //check for correct
+        incrementCount(val == getCurrentNumberValue());
+        setTimeout(getKeyQuestion, timeBetweenQuestionsMilliseconds);
+    }
+
+    function showDSSTQuestion(show) {
+        if (show) {
+            $('#dsst-question').show();
+        } else {
+            $('#dsst-question').hide();
+        }
+    }
+
+    function getCurrentNumberValue() {
+        return currentNumberValue;
+    }
+
+    function setCurrentNumberValue(val) {
+        currentNumberValue = val;
+        $('#currentNumber').html(val);
+    }
+
+    function setCurrentIconValue(val) {
+        $('#currentIcon').removeClass();
+        if (val.length > 0) {
+            $('#currentIcon').addClass('fa ' + val);
+        }
+    }
+
+    function incrementCount(correct) {
+        if (correct) {
+            numCorrect++;
+        } else {
+            numIncorrect++;
+        }
+
+        showCount();
+    }
+
+    function showCount() {
+        $('#correct').html(getCorrect());
+        $('#incorrect').html(getInCorrect());
+    }
+
+    function getCorrect() {
+        return numCorrect;
+    }
+
+    function getInCorrect() {
+        return numIncorrect;
+    }
+
+    /**************************
+    * UI Control
+    **************************/
+    function createControl(type, options) {
+        var ctrl = document.createElement(type);
+        for (var p in options) {
+            ctrl.setAttribute(p, options[p]);
+        }
+        return ctrl;
+    }
+
+    function getRandomNumber() {
+        var lastNumber = getCurrentNumberValue();
+        var currentNumber = getCurrentNumberValue();
+        while (lastNumber == currentNumber) {
+            currentNumber = getRandomNumberBase(1, 9);//Math.floor(Math.random() * 9) + 1
+        }
+        return currentNumber;
+    }
+
+    function getRandomNumberBase(min, max) {
+        return Math.floor(Math.random() * max) + min;
+    }
+</script>

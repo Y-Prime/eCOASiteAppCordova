@@ -1,0 +1,104 @@
+﻿<h1>Scan a Kit Number</h1>
+<button class="menu-button" id="barcodeScanDispensed" translation="keyScanKitButton" onclick="scan()">Scan</button>
+
+<br />
+<h1>OR</h1>
+    <br />
+<fieldset data-role="controlgroup">
+    <div class="h-center">
+        <input id="kitNumber" type="text" placeholder="Enter a Kit Number" />
+    </div>
+</fieldset>
+   
+    <footer>
+        <table>
+            <tr>
+                <td>
+                    <input class="nav-button" type="button" value="Back" next-screen="SelectFunction" next-screen-title="" translation="keyBack" />
+                </td>
+                <td>
+                    <input class="nav-button" type="button" value="Exit" next-screen="SiteMain" next-screen-title="" translation="keyExit" />
+                </td>
+                <td>
+                    <input type="button" value="Next" translation="keyNext" onclick="validateScan()" />
+                </td>
+            </tr>
+        </table>
+    </footer>
+
+    <script type="text/javascript">
+        $(function () {
+            scanType = screenController.getScreenParameters().ScanType;           
+            screenController.clearInputDefaults();
+        });
+
+        var decodedBarcode = "";
+        function scan() {
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    decodedBarcode = result.text;
+                    if (decodedBarcode != "") {
+                        pgConfirm("Kit: " + result.text, onConfirmScan, "Confirm Scan", ['OK', 'Cancel']);
+                    }
+                                 },
+                function (error) {
+                                 alert("Scanning failed: " + error);
+                                    }
+                 );
+        }
+        function onConfirmScan(buttonIndex) {
+            if(buttonIndex==1)
+            {
+                $("#kitNumber").val(decodedBarcode);
+            }else
+            {
+                $("#kitNumber").val('');
+                scan();
+            }
+        }
+
+        function onConfirmContinue(buttonIndex) {
+            if(buttonIndex==2)
+            {
+                if (scanType == "Dispense") {
+                    app.alert("Thank you for completing the dispensed kit scan. Please release these kits to the patient.", "Kit Scan Completed");
+                } else {
+                    app.alert("Thank you for completing the returned kit scan. This return will now be recorded in the IRT and allow for the entry of tablet count.", "Kit Scan Completed");
+
+                }
+                onScanVerified();
+            }
+        }
+
+        function onScanVerified() {           
+            var nextScreen = "SiteMain";
+            screenController.changeScreen(nextScreen, "", null, null, function () { });
+        }
+
+        function onSuccessValidate(e) {
+            $("#kitNumber").val('');
+            if (e == "Successfully Scanned") {
+                pgConfirm("Would you like to scan or enter another kit?", onConfirmContinue, "Continue?", ['Yes', 'No']);
+            }
+            else {
+                var errorMessage = e;
+                if (e == "Invalid Kit") {
+                    errorMessage = "This is not a valid Kit. Please scan or enter a kit number to continue.";
+                }
+                if (e == "Incorrect Kit") {
+                    errorMessage = "DO NOT USE! This kit is invalid. Please verify the kit number. Please scan or enter a new kit to continue, or contact your site investigator for assistance.";
+                }
+                if (e == "Previously Scanned") {
+                    errorMessage = "This kit was previously scanned.Tap OK to return to the Menu.";
+                }
+                    app.alert(errorMessage, "WARNING!", null);
+            }
+        }
+        
+        function validateScan() {
+            var drugKitNumber = $("#kitNumber").val();
+            var patientId = patientController.getCurrentPatient().PatientNumber;
+            serviceCalls.checkForDrugKitValidity(patientId, drugKitNumber, scanType, getCurrentDate(), onSuccessValidate, null);
+          }
+
+    </script>

@@ -1,0 +1,39 @@
+﻿<fieldset data-role="controlgroup">
+    <legend translation="keyEnterPhoneNumber">Enter the last 4 digits of your phone number</legend>
+    <input id="EnrollmentAnswer" type="number" class="med-width" translation="keyPhonePlaceholder" placeholder="..." maxlength="4" />
+    <div class="numeric-pad" numeric-input="EnrollmentAnswer"></div>
+</fieldset>
+
+<footer>
+    <table>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input id="ExitButton" class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="VisitQuestionnaires" next-screen-title="" />
+            </td>
+            <td>
+                <input class="" type="button" value="Next" translation="keyNext" onclick="enroll()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    function enroll() {
+        var securityQuestionId = -1; //this not used in this study 
+        var answerValue = screenController.getSavedControlValue($('#EnrollmentAnswer'), 'PatientEnrollSecurityQuestion');
+
+        function onEnrollSuccess() {
+            screenController.changeScreen('PatientEnrolledSuccess', '');
+        }
+        var message = patientController.validSecurityAnswerValue(securityQuestionId, answerValue);
+        
+        if (message == '') {
+            patientController.getCurrentPatient().enroll(securityQuestionId, answerValue, onEnrollSuccess);
+        } else {
+            app.alert(message);
+        }
+
+    }
+</script>

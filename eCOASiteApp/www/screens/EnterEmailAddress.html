@@ -1,0 +1,44 @@
+﻿<div class="inner-content">
+    <fieldset data-role="controlgroup">
+        <legend translation="keyEnterYourEmailAddress">Enter your email address:</legend>
+        <input id="emailAddress" type="text" class="med-width" translation="keyEmailAddress" />
+    </fieldset>
+</div>
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <input class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="" />
+            </td>
+            <td>
+                <!--<input class="nav-button med-width" type="button" value="Exit" next-screen="Tools" next-screen-title="Tools Menu" />-->
+            </td>
+            <td>
+                <input class="" type="button" value="Next" onclick="saveEmailAddress()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+    });
+
+    function saveEmailAddress() {
+        var reminderValue = $('#emailAddress').val();
+        if (validScreen(reminderValue)) {
+            reminderController.currentSelectedReminder.ReminderValue = reminderValue;
+            var nextScreen = "SelectReminderTime";
+            var title = "";
+
+            screenController.changeScreen(nextScreen, title, null, null, null)
+        } else {
+            app.alert(translationController.get('keyEmailAddressRequired'));
+        }
+    }
+
+    function validScreen(val) {
+        return val.length > 0;
+    }
+</script>

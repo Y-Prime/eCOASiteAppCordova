@@ -1,0 +1,35 @@
+﻿<div class="inner-content">
+    <div class="instruction-text h-center bold margin-bottom-standard" translation="keyDailyDiaryHistory"></div>
+    <div id="DiaryHistoryContent"></div>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Main" next-screen-title="keySubjectMainMenu" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+
+        function rowSuccess(rows) {
+            var obj = $('#DiaryHistoryContent');
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var div = uiController.createControl('div', {});
+                $(div).html(moment(row['Date']).format('DD MMM YYYY'));
+                $(obj).append(div);
+            }
+        }
+
+        patientController.getCurrentPatient().getDiaryHistory(rowSuccess);
+    });
+</script>
+

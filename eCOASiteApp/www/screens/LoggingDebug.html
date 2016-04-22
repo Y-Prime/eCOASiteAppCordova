@@ -1,0 +1,55 @@
+﻿
+<input type="text" id="inputText" />
+<button id="writeLog" onclick="writeToLog()">Write To Log</button>
+<label for="chkOverwrite">Overwrite the file:</label>
+<input id="chkOverwrite" type="checkbox" />
+<input type="button" value="Refresh" onclick="showLogFile(true)" />
+<textarea id="displayLog"></textarea>
+
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="Debug" next-screen-title="" translation="keyExit" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</footer>
+
+<style type="text/css">
+    textarea {
+        height: 200px;
+        width: 100%;
+        margin-top: 20px;
+        overflow-y: scroll;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        showLogFile();
+    });
+
+    function showLogFile(alert) {
+        var callback = function (txt) {
+            $('#displayLog').val(txt);
+            if (alert) {
+                app.alert(txt);
+            }
+        };
+
+        fileController.readFile("log.txt", callback);
+    }
+
+
+
+    function writeToLog() {
+        var message = $('#inputText').val();
+        var overwrite = $('#chkOverwrite').is(':checked');
+
+        fileController.writeFile("log.txt", message, overwrite, showLogFile);
+    }
+</script>

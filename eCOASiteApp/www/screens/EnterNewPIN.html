@@ -1,0 +1,55 @@
+﻿<fieldset data-role="controlgroup">
+    <legend translation="keyEnterYourNewPIN"></legend>
+    <input id="NewPin" type="password" class="med-width" placeholder="PIN" translation="keyPIN" maxlength="4" />
+    <div class="numeric-pad" numeric-input="NewPin"></div>
+</fieldset>
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <input id="BackButton" class="nav-button" type="button" translation="keyBack" value="Back" next-screen="EnterOldPIN" next-screen-title="" />
+            </td>
+            <td>
+                <input id="ExitButton" class="" type="button" translation="keyExit" value="Exit" onclick="exitPinScreen()" />
+            </td>
+            <td>
+                <input type="button" value="Next" translation="keyNext" onclick="checkNewPin()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        setupScreen();
+    });
+
+    function setupScreen() {
+        if (patientController.getCurrentPatientIsTempPin()) {
+            //temporary pin reset
+            $('#BackButton').hide();
+            $('#ExitButton').attr('next-screen', 'Login').attr('next-screen-title', '');
+        } else {
+            //standard pin reset
+            //leave as is
+        }
+    }
+
+    function exitPinScreen() {
+        var screen = patientController.getExitChangePinScreen();
+        var title = patientController.getExitChangePinScreenTitle();
+        screenController.changeScreen(screen, title);
+    }
+
+    function checkNewPin() {
+        var newPin = $('#NewPin').val();
+        if (patientController.validPin(newPin)) {
+            var nextscreen = "ConfirmNewPIN";
+            screenController.changeScreen(nextscreen, '');
+        } else {
+            $('#NewPin').val('');
+            patientController.showInvalidPinMessage();
+        }
+    }
+</script>

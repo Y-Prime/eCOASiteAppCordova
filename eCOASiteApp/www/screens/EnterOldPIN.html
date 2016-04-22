@@ -1,0 +1,39 @@
+﻿<fieldset data-role="controlgroup">
+    <legend translation="keyEnterOldPIN"></legend>
+    <input id="OldPin" type="password" class="med-width" placeholder="PIN" oninput="return false;" />
+    <div class="numeric-pad" numeric-input="OldPin"></div>
+</fieldset>
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Tools" next-screen-title="keyToolsMenu" />
+            </td>
+            <td>
+                <input type="button" value="Next" translation="keyNext" onclick="validOldPin()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+    });
+
+    function validOldPin() {
+        var pin = $('#OldPin').val();
+        var nextScreen = 'EnterNewPIN';
+
+        var onSuccess = function () {
+            screenController.changeScreen(nextScreen, '');
+        };
+
+        function onFail() {
+            $('#OldPin').val('');
+        }
+        
+        patientController.login(currentSubjectNumber, pin, onSuccess, onFail);
+    }
+</script>

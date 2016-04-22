@@ -1,0 +1,47 @@
+﻿<div class="content-panel-noHeader">
+    <fieldset data-role="controlgroup">
+        <div class="h-center">
+            <h2 translation="keySubjectLogin">Confirm your new PIN.</h2>
+            <h3 id="patient"></h3>
+            <input id="pin" type="password" />
+            <div class="numeric-pad" numeric-input="pin" click-event="submitElectronicSignature"></div>
+        </div>
+    </fieldset>
+ </div>
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="center">
+            <button class="btn-nav" type="button" value="[Back]" translation="keyBack" onclick="goBack()">
+                <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+            </button>
+        </h5>
+    </footer>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#patient').html(patientController.getCurrentPatient().EnrolledId);
+        });
+
+        function goBack() {
+            screenController.changeScreen('VisitQuestionnaires', '');
+        }
+
+        function submitElectronicSignature() {
+            var pin = $('#pin').val();
+
+            function onSuccess() {
+                var callback = patientController.getCurrentLoginCallback();
+                if (typeof callback == 'function') {
+                    callback();
+                    patientController.setCurrentLoginCallback(null);
+                } else {
+                    screenController.changeScreen('VisitQuestionnaires', '');
+                }
+            };
+
+            function onFail() {
+                $('#pin').val('');
+            }
+
+            patientController.login(patientController.getCurrentPatient().PatientNumber, pin, onSuccess, onFail);
+        }
+    </script>

@@ -1,0 +1,86 @@
+﻿
+            <div id="logo" class="center">
+                <img src="./images/user_login_logo.png" class="yprime-logo" />
+            </div>
+            <form>
+    <div class="center">
+        <i class="ui-btn ui-icon-fa ui-icon-fa-user-md site-user"></i>
+    </div>
+    <div class="center">
+        <input id="username" name="username" class="white auth full-width" type="email" placeholder="Email" maxlength="50" translation="keySiteUserName" value="" />
+        <hr class="darkgray auth-hr">
+        <input id="password" name="password" class="white auth full-width" type="password" placeholder="Password" maxlength="20" translation="keyPassword" value="" />
+        <hr class="darkgray auth-hr">
+    </div>
+    <div class="center">
+        <a id="userLogin" name="userLogin" href="#" class="ui-btn btn-login" translation="keyLogin">
+            Log in
+            <i class="ui-icon-fa ui-icon-fa-sign-in pad-right"></i>
+        </a>
+
+    </div>
+
+</form>
+<footer data-role="footer" data-position="fixed" class="background-blue login-footer">
+    <p class="white left icon80"> <i class="ui-icon-fa ui-icon-fa-cog"></i> </p>
+
+    <p class="white right icon80"> <i class="ui-icon-fa ui-icon-fa-question"></i> </p>
+
+</footer>
+ 
+
+<script type="text/javascript">
+    $(function () {
+        $('#userLogin').bind('click', loginUser);
+        $('#exitApp').bind('click', closeApp);    
+        siteUserController.logout();
+
+       // $('#versionNumber').html('&nbsp;' + app.getVersion());
+
+        //debug!!!!
+       // if (DEBUGMODE) {
+          // $('#username').val('josifchin@y-prime.com');
+           // $('#password').val('Password3');
+        //}
+            function setVersionFooter() {
+                var footer = $('footer div div');
+                var html = $(footer).html() + ' ' + app.getVersion();
+                $(footer).html(html);
+            }
+
+            setTimeout(setVersionFooter, 1);
+    });
+
+    function loginUser() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        //validate
+        if (validLoginForm(username, password)) {
+            //display error or navigate to main
+            function fnSuccessfulLogin() {
+                screenController.changeScreen('SiteMain', '');
+            }
+            function onFail() {
+                $('#password').val('');
+            }
+
+            function onError() {
+                app.alert(translationController.get('keyError'));
+            }
+
+            siteUserController.login(username, password, fnSuccessfulLogin, onFail, onError)
+        }
+    }
+
+    function validLoginForm(username, password) {
+        var result = true;
+        if (username.length == 0 || password.length == 0) {
+            result = false;
+            $('#password').val('');
+            patientController.failedLoginHandler();
+        }
+        return result;
+    }
+
+</script>

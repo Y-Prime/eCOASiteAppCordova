@@ -1,0 +1,49 @@
+﻿<label class="instruction-text" translation="keyLastFourDigitsPhoneNumber"></label>
+<input id="lastFourDigits" type="number" maxlength="4" />
+<div class="numeric-pad" numeric-input="lastFourDigits"></div>
+
+
+
+<footer>
+    <table class="nav-table">
+        <tr>
+            <td></td>
+            <td>
+                <input class="nav-button" type="button" translation="keyExit" value="Exit" next-screen="Login" next-screen-title="" />
+            </td>
+            <td>
+                <button class="" type="button" value="Exit" translation="keyNext" onclick="retrievePIN()">
+                    <span>[Next]</span><i class="fa fa-angle-right fa-2x right-icon"></i>
+                </button>       
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    function retrievePIN() {
+        var lastFourDigits = $('#lastFourDigits').val();
+        if (lastFourDigits.length == 4 && isNumeric(lastFourDigits)) {
+            patientController.validSecurityAnswer(lastFourDigits, resetPin, showMismatchedPin);
+        } else {
+            showInvalidPinLookup();
+        }
+    }
+
+    function resetPin() {
+        patientController.getCurrentPatient().IsTempPin = true;
+        screenController.changeScreen('EnterNewPIN', '');
+    }
+
+    function showInvalidPinLookup() {
+        app.alert(translationController.get('keyInvalidLast4Digits'));
+    }
+    function showMismatchedPin() {
+        app.alert(translationController.get('keyIncorrectLastFourDigits'));
+    }
+    
+</script>

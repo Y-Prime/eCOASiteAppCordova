@@ -1,0 +1,119 @@
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="content-panel">
+    <div id="patient-visits-div" class="button-list">
+    </div>
+</div>
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="left">
+            <button class="nav-button" type="button" value="Back" next-screen="SelectFunction" next-screen-title="" translation="keyBack" onClick()="gotoBack()" >
+                <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+                </button>
+     </h5>
+      
+            <h5 class="right">
+                <button type="button" class="btn-nav" value="Next" translation="keyNext" onclick="openVisit()" >
+                    Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>
+                </button>
+            </h5>
+        <h5 class="center">
+            <button class="nav-button" type="button" value="Exit" next-screen="SiteMain" next-screen-title="" translation="keyExit" onClick="gotoMain()" >
+                Exit
+                </button>
+        </h5>
+</footer>
+
+    <script type="text/javascript">
+        $(function () {
+            init();
+        });
+
+        function init() {
+            function loadVisits(tx, rows) {
+                //var div1 = $('#patient-visits-div1');
+                //var div2 = $('#patient-visits-div2');
+                //$(div1).empty();
+                //$(div2).empty();
+
+                var div = $('#patient-visits-div');
+
+                var middleCount = rows.length / 2;
+                var foundCurrent = false;
+                //debugger;
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var incomplete = row.cnt != row.qcnt && !foundCurrent;
+                    if (incomplete && !foundCurrent) {
+                        //foundCurrent = true;
+                    }
+                    //$(i < middleCount ? div1 : div2).append(createVisitButton(rows[i], incomplete, (!incomplete && !foundCurrent)));
+                    $(div).append(createVisitButton(rows[i], incomplete, (!incomplete && !foundCurrent)));
+                }
+                screenController.headerHandler('keySelectVisit');
+            }
+
+            patientController.getCurrentPatient().getVisits(loadVisits);
+        }
+        function gotoMain() {
+            screenController.changeScreen("SiteMain", "");
+        }
+
+        function gotoBack() {
+            screenController.changeScreen("SelectFunction", "");
+        }
+        function createVisitButton(visit, enabled, completed) {
+            var par = {
+                type: "button",
+                //"class": completed ? "completed-button" : "",
+                "value": visit.DisplayName,
+                "id": "visit-" + (visit.VisitId * 1),
+                "class": "visit menu-button btn-fixed"
+            }
+            if (!enabled) {
+                par["disabled"] = "disabled";
+            }
+
+            var btn = uiController.createControl(
+                'button',
+                par
+                );
+            $(btn).html(visit.DisplayName + (completed ? '<i class="ui-icon-fa ui-icon-fa-check completed-button-icon"></i>' : ""));
+
+            if (enabled) {
+                $(btn).bind('tap', function () { selectVisit(visit); });
+            }
+            return btn;
+        }
+
+        function selectVisit(visit) {
+            var css = "selected-button";
+            $('.visit.menu-button.btn-fixed').each(function () {
+                $(this).removeClass(css);
+            });
+            $("#visit-" + visit.VisitId).addClass(css);
+            visitController.setCurrentVisit(visit);
+        }
+
+        function openVisit() {
+            if (visitController.getCurrentVisit() != null) {
+                screenController.changeScreen('VisitQuestionnaires', '');
+            } else {
+                app.alert(translationController.get('keyPleaseSelectAVisit'));
+            }
+        }
+    </script>

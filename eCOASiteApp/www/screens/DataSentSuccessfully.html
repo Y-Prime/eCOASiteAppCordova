@@ -1,0 +1,23 @@
+﻿<label class="instruction-text" translation="keyDataSuccessfullySent"></label>
+
+
+<input type="button" value="OK" translation="keyOK" onclick="goToHomeScreen()" />
+
+<script type="text/javascript">
+    $(function () {
+        //check for any callbacks when data sent successfully
+        var callback = screenController.getDataTransferSuccessCallback();
+        if (typeof callback == 'function') {
+            callback();
+        }
+        screenController.setDataTransferSuccessCallback(null);
+    });
+
+    function goToHomeScreen() {
+        if (app.getSiteBasedMode()) {
+            screenController.changeScreen('VisitQuestionnaires', '');
+        } else {
+            screenController.changeScreen('Main', 'keySubjectMainMenu');
+        }
+    }
+</script>

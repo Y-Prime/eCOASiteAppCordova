@@ -1,0 +1,35 @@
+﻿<label class="instruction-text" translation="keyDataHasBeenSaved"></label>
+<div id="sending-div">
+    <label class="instruction-text" translation="keySendingData"></label>
+    <!--[[ INSERT PROGRESS BAR ICON ]]-->
+</div>
+<div id="not-sending-div">
+    <input type="button" value="OK" translation="keyOK" onclick="screenController.changeScreen('Main','keySubjectMainMenu')" />
+</div>
+<footer>
+    <table></table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        if (!serviceController.connected()) {
+            $('#sending-div').hide();
+        } else {
+            $('#not-sending-div').hide();
+        }
+
+        //transmit the data
+        function onSuccess() {
+            screenController.changeScreen('DataSentSuccessfully', '');
+        }
+
+        function onError() {
+            screenController.changeScreen('DataSendFailed', '');
+        }
+        //wait for the data to get into the db
+        setTimeout(function () {
+            app.syncAnswers(onSuccess, onError);
+            //questionController.transmitUnsentEntries(onSuccess, onError);
+        }, 1000);
+    });
+</script>

@@ -1,0 +1,54 @@
+﻿<input type="button" onclick="dbController.resetDB()" value="Reset DB" />
+<input type="button" onclick="alertTable()" value="Show Alert Data" />
+
+<select id="tableList"></select>
+
+<div id="results"></div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" next-screen="Debug" next-screen-title="" translation="keyExit" />
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        var tables = dbController.tableList();
+        var obj = $('#tableList');
+        for (var i = 0; i < tables.length; i++) {
+            $(obj)
+                .append($("<option></option>")
+                .attr("value", tables[i])
+                .text(tables[i]));
+        }
+
+        $(obj).bind('change', function () {
+            var t = $(this).val();
+            dbController.showTable(t, $('#results'));
+        });
+    });
+
+    function alertTable() {
+        dbController.showTable($('#tableList').val());
+    }
+</script>
+
+<style type="text/css">
+    #results {
+        background-color: #ffffff;
+        border: 1px solid #000000;
+        height: 25em;
+        width: 100%;
+        overflow: auto;
+        font-family: 'Courier New';
+    }
+</style>

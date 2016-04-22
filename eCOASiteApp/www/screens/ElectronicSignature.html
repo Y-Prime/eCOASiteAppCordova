@@ -1,0 +1,38 @@
+﻿<label class="instruction-text" translation="keyElectronicSignatureText"></label>
+<input id="pin" type="password" />
+<div class="numeric-pad" numeric-input="pin" click-event="submitElectronicSignature"></div>
+<!-- the click-event tag tells the renderer to make the C button and ok click event -->
+
+<footer>
+    <table>
+        <tr>
+            <td></td>
+            <td>
+                <input class="" type="button" value=" [Back]" translation="keyBack" onclick="screenController.goToPreviousScreen(false, true)" />
+            </td>
+            <td>
+                <!--<input type="button" value="OK" translation="keyOK" onclick="submitElectronicSignature()" />-->
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+    });
+
+    function submitElectronicSignature() {
+        var pin = $('#pin').val();
+
+        function onSuccess() {
+            var pars = screenController.getScreenParameters();
+            questionController.completeQuestionnaire(pars.typename);
+        };
+
+        function onFail() {
+            $('#pin').val('');
+        }
+
+        patientController.loginDB(patientController.getCurrentPatient().PatientNumber, pin, onSuccess, onFail);
+    }
+</script>

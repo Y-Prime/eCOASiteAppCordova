@@ -1,0 +1,509 @@
+﻿body {
+    font-family: 'Arial Unicode MS';
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+header {
+    font-size: 13pt; /*20pt;*/
+    /*min-height: 1.8em;*/
+    text-align: center;
+}
+
+
+.thumb {
+    width: 4em;
+}
+
+#main-content {
+    /*padding-top: .5em;*/
+    /*margin: .8em;*/
+    padding: .5em;
+}
+
+#terms-content {
+    height: 20em;
+    overflow: auto;
+}
+
+.inner-content {
+    background-color: #ffffff;
+    border: solid 1px #d8d8d8;
+    border-radius: .25em;
+    padding: 0.7em;
+}
+
+.small-text {
+}
+
+header, footer {
+    background-color: #204f99;
+    color: #ffffff;
+}
+
+.standard-padding {
+    padding: .8em;
+}
+
+footer {
+    font-size: .9em;
+    position: absolute;
+    bottom: 0px;
+    min-height: 1.6em;
+    width: 100%;
+    text-align: center;
+    /*line-height: 3.0em;*/
+}
+
+.sub-footer {
+    position: absolute;
+    bottom: 3em;
+    width: 100%;
+}
+
+footer table {
+    width: 100%;
+}
+
+    footer table td {
+        width: 33%;
+        padding: 0.5em;
+    }
+
+        footer table td input, footer table td button {
+            width: 100%;
+        }
+
+
+footer .fa {
+    position: absolute;
+    font-weight: bold;
+    color: #204f99;
+    top: .32em;
+}
+
+footer .right-icon {
+    right: .35em;
+}
+
+footer .left-icon {
+    left: .35em;
+}
+
+.small-padding {
+    padding: .5em;
+}
+
+input, button {
+    font-size: 1.5em;
+    display: block;
+    /*margin: .5em 0em;*/
+    padding: .5em;
+    /*border-radius: 5px !important;*/
+}
+
+    input[type="text"], input[type="password"] {
+    }
+
+    input[type="password"] {
+        color: #204f99;
+    }
+
+.gray-background {
+    background-color: #d8d8d8;
+}
+
+.white-background {
+    background-color: #ffffff;
+}
+
+.half-width {
+    width: 13.3em;
+}
+
+.full-width {
+    width: 90%;
+}
+
+.one-hundred-width {
+    width: 100%;
+}
+
+.third-width {
+    width: 33%;
+}
+
+button.full-width, input[type="button"].full-width {
+    width: 98%;
+}
+
+.large-width {
+}
+
+.med-width {
+    width: 4.3em;
+}
+
+.small-width {
+}
+
+.h-center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold !important;
+}
+
+.splash {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: url('../img/user_login_logo.png') no-repeat center center;
+    background-color: #ffffff;
+}
+
+.clear {
+    clear: both;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+    text-align: right;
+}
+
+.margin-right-standard {
+    margin-right: 1em;
+}
+
+.margin-left-standard {
+    margin-left: 1em;
+}
+
+.margin-top-standard {
+    margin-top: 2em;
+}
+
+.margin-bottom-standard {
+    margin-bottom: 2em;
+}
+
+.instruction-text {
+    font-size: 1.5em !important;
+}
+
+#debug {
+    position: absolute;
+    left: 0px;
+    top: 100px;
+    opacity: .4;
+}
+
+/**************************
+* User Login
+***************************/
+.user-login {
+    width: 100%;
+    text-align: center;
+}
+
+    .user-login td {
+        width: 33%;
+    }
+
+/***********************
+* Site Main Menu
+************************/
+.menu-button {
+    font-size: 2em;
+}
+
+/***********************
+* Select Subject
+************************/
+#patients-div {
+    height: 22em;
+    /*overflow: scroll;*/
+    width: 75%;
+    margin: 2em auto;
+    font-size: 1.5em;
+}
+
+#patient-list {
+    height: 22em;
+    overflow-y: scroll;
+}
+
+.li-selected a, .selected-button {
+    background-color: #204f99 !important;
+    color: #ffffff !important;
+}
+
+/*********************
+* Patient Visits
+**********************/
+.button-list {
+    /*float: left;
+    height: 50%;*/
+}
+
+    .button-list input, .button-list button {
+        width: 100%;
+        margin: .5em 0em;
+        height: 2.5em;
+        font-size: 1.4em;
+    }
+
+.completed-button-icon {
+    color: green;
+    float: right;
+}
+
+/*.selected-button {
+    font-weight: bold;
+}*/
+
+/***************************
+* Diary History Screen
+****************************/
+#DiaryHistoryContent div {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+/*************************
+* Control rendering CSS    
+***********************/
+.question-text-wrapper {
+    font-size: 1.5em;
+}
+
+.question-text {
+    min-height: 8em;
+}
+
+    .question-text h3 {
+        text-align: center;
+    }
+
+.question-response {
+    min-height: 7em;
+}
+
+
+.ui-input-text {
+    margin: .9em 0em !important;
+}
+
+.ui-corner-all, .ui-btn {
+    /*border-radius: 0px !important;*/
+}
+
+.ui-select {
+    border-style: none;
+}
+
+.ui-input-btn {
+    font-size: 1.5em;
+    background-color: #dddddd !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+.plain-radio .ui-radio {
+    margin-bottom: 1em;
+}
+
+.plain-radio .ui-btn-icon-left:after {
+    opacity: 0 !important;
+}
+
+.plain-radio .ui-radio label {
+    text-align: center;
+    padding-left: 0em;
+}
+
+.radio-checkbox .ui-btn-icon-left:after {
+    position: absolute;
+    left: auto;
+    right: .5em;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.radio-checkbox .ui-radio-on:after {
+    background-color: #4596ce !important;
+    background-image: url('../../bower_components/jquery-mobile-bower/css/images/icons-png/check-white.png') !important;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    border-width: 0px !important;
+}
+
+.radio-checkbox label {
+    padding-left: .5em;
+    padding-right: 2.5em;
+}
+
+
+/***********SELECT***********/
+.select-control {
+    padding: 1em;
+    width: 100%;
+}
+
+
+/*skip the highlights for question controls*/
+.question-text-wrapper .ui-focus, .ui-focus, .ui-shadow {
+    box-shadow: none !important;
+}
+
+.question-text-wrapper > div:first-of-type {
+    margin-bottom: 1em;
+}
+
+.NRS-fieldset > div, .horizontal-radio > div > fieldset > div {
+    width: 100%;
+}
+
+.NRS-fieldset .ui-radio, .horizontal-radio .ui-radio {
+    border-radius: initial;
+}
+
+    .NRS-fieldset .ui-radio label, .horizontal-radio .ui-radio label {
+        text-align: center;
+        padding: 0.1em; /*0.2em;*/
+        font-size: 1.2em; /*1.4em;*/
+        text-overflow: clip;
+        height: 3em;
+        line-height: 3em;
+    }
+
+.ui-checkbox label {
+    font-size: 1em;
+}
+
+.ui-radio label {
+    font-size: .7em;
+}
+
+.NRS-label {
+    width: 10em;
+    position: relative;
+}
+
+    .NRS-label.left {
+        left: -.7em;
+    }
+
+    .NRS-label.right {
+        right: -.7em;
+    }
+
+.ui-mobile label {
+    /*font-size: 1.7em;*/
+}
+
+.number-picker {
+    text-align: center;
+}
+
+    .number-picker div:not(.clear) {
+        width: 4em;
+        margin: 0px .25em;
+        float: right;
+    }
+
+    .number-picker button {
+        padding: 0px;
+    }
+
+    .number-picker input {
+        width: 100%;
+        border: none;
+        text-align: center;
+        padding: 0px;
+        background-color: transparent;
+    }
+
+.number-picker-description {
+    line-height: 10em;
+}
+
+.training-border {
+    border: .3em solid red;
+}
+
+/**********************
+* Native android override
+**********************/
+.android-scroll-bar ::-webkit-scrollbar {
+    width: 5px;
+}
+
+.android-scroll-bar ::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.android-scroll-bar ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgb(169,169,169);
+}
+
+    .android-scroll-bar ::-webkit-scrollbar-thumb:window-inactive {
+        background: rgb(128,128,128);
+    }
+
+
+/****************
+* SCALE SPECIFIC    
+*****************/
+.EQ_5D_5L {
+    margin-top: 1em;
+}
+
+    .EQ_5D_5L .question-text {
+        min-height: 0px;
+        margin-bottom: .25em !important;
+    }
+
+    .EQ_5D_5L p {
+        margin: 1em 0px 0px;
+    }
+
+    .EQ_5D_5L .copy-right {
+        font-size: .5em;
+        position: absolute;
+        bottom: 7em;
+    }
+
+    .EQ_5D_5L.copy-right-wide {
+        font-size: .5em;
+        position: absolute;
+        bottom: 0.1em;
+    }
+
+
+/*******************
+    DSST Specific
+********************/
+.DSST .medium-text p {
+    font-size: .65em;
+}
+
+    .DSST .medium-text p img {
+        width: 525px;
+        height: auto;
+    }

@@ -1,0 +1,43 @@
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="content-panel">
+    <button class="menu-button btn-fixed" id="buttonSelectVisit" translation="keySelectVisit" next-screen="PatientVisits" onClick="gotoPatientVisits()">Select Visit</button>
+    <button class="menu-button btn-fixed" id="btnKitsDispensed" translation="keyScanDispensedKitsButton" onclick="gotoScanMenu('Dispense')">Kits Dispensed Today</button>
+    <button class="menu-button btn-fixed" id="btnKitsReturned" translation="keyScanReturnedkitsButton" onclick="gotoScanMenu('Return')">Kits Returned Today</button>
+ </div>
+    <div class="nav-footer">
+        <h5 class="center">
+            <button class="nav-button" type="button" value="Exit" next-screen="SiteMain" next-screen-title="" translation="keyExit" onClick="gotoMain()" >
+            Exit   
+             </button>
+        </h5>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+        });
+        function gotoMain() {
+            screenController.changeScreen("SiteMain", "");
+        }
+        function gotoScanMenu(scanType) {
+            screenController.changeScreen("ScanMenu", "", null, null, function () { }, { "ScanType": scanType });
+        }
+        function gotoPatientVisits() {
+            screenController.changeScreen("PatientVisits", "", null, null, function () { }, null);
+        }
+    </script>

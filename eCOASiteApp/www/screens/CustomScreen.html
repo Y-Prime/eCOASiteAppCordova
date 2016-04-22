@@ -1,0 +1,189 @@
+﻿
+<div id="vertical-slider">
+    <div class="left">
+        <div translation="VerticalSlider"></div>
+        <label class="left" translation="VerticalSliderHealthToday" for="healthtoday"></label>
+        <input type="number" id="healthtoday" disabled="disabled" />
+    </div>
+    <div class="right margin-right-standard">
+        <div class="slider-wrapper">
+            <div class="slider-background"></div>
+            <div class="slider-handle"></div>
+            <input id="slider-native" type="range" orient="vertical" data-role="none" max="100" min="0" step="1" />
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<a id="home" name="home" class="nav-button full-width" href="#" next-screen="Main" next-screen-title="tk_SubjectMainMenu">Return to main menu</a>
+
+<style type="text/css">
+    #vertical-slider {
+        font-size: 10pt;
+    }
+
+        #vertical-slider .left {
+            width: 14.4em;
+        }
+
+            #vertical-slider .left label {
+                width: auto;
+                margin: 1.5em 0.2em 0em 0.5em;
+                font-size: 10pt;
+            }
+
+            #vertical-slider .left .ui-input-text {
+                width: 4em;
+                float: left;
+            }
+
+                #vertical-slider .left .ui-input-text input {
+                    padding-left: 0.2em;
+                    width: 3.5em;
+                }
+
+
+    input[type=range][orient=vertical] {
+        writing-mode: bt-lr; /* IE */
+        -webkit-appearance: slider-vertical; /* WebKit */
+        opacity: 0.01;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
+
+    input[type=range][orient=vertical], .slider-wrapper {
+        width: 1em;
+        /*height: 16em;*/
+        height: 300px;
+        padding: 0 .2em;
+    }
+
+    .slider-wrapper {
+        position: relative;
+    }
+
+    .slider-background {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slider-handle {
+        background-color: red;
+        height: .3em;
+        width: 2em;
+        position: absolute;
+        left: 0px;
+    }
+
+    .tick {
+        background-color: #000000;
+        position: absolute;
+    }
+
+    .large-tick {
+        height: 1px;
+        width: 2em;
+    }
+
+    .small-tick {
+        height: 1px;
+        width: 1em;
+        margin-left: .55em;
+    }
+
+    .tick-number {
+        position: absolute;
+        right: -30px;
+        height: 10px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        renderTicks();
+
+        var event = 'change';
+        $('#slider-native').bind(event, function (obj, e) {
+            updateSlider(this.value);
+        });
+
+        event = 'input';
+        $('#slider-native').bind(event, function (obj, e) {
+            updateSlider(this.value);
+        });
+
+       
+        setTimeout(function () {
+            $('#slider-native').trigger('change');
+        }, 10);
+        //updateSlider($('#slider-native').val());
+    });
+
+    function updateSlider(val) {
+        $('#healthtoday').val(val);
+        $('#healthtoday').trigger('keyup');
+
+        //get the position of the handle
+        var obj = $('.slider-background');
+        var handle = $('.slider-handle');
+        var min = 0;
+        var max = 100;
+        var step = 5;
+
+        var h = $(obj).height();
+        var w = $(obj).width();
+        var t = $(obj).offset().top;
+
+        var topOffset = h / 101;
+        var handleBottom = topOffset * val;
+        $(handle).css('bottom', handleBottom + 'px');
+
+    }
+
+    function renderTicks() {
+        var obj = $('.slider-background');
+        var min = 0;
+        var max = 100;
+        var step = 5;
+
+        var h = $(obj).height();
+        var w = $(obj).width();
+        var t = $(obj).offset().top;
+
+        var topOffset = h / 101;
+        var currentBottom = 0;
+
+        for (var i = 0; i <= max; i++) {
+            if ((i % 5) == 0) {
+                var tick = createControl('div', { 'class': 'tick ' + (i % 10 == 0 ? 'large-tick' : 'small-tick') });
+                $(tick).css('bottom', currentBottom + 'px');
+                $(obj).append(tick);
+                //add a number
+                $(obj).append(createNumber(i, currentBottom));
+            }
+            currentBottom += topOffset;
+        }
+    }
+
+    function createNumber(val, bottom) {
+        var obj =  uiController.createControl('div', {
+            "class": "tick-number"
+        });
+        $(obj).html(val);
+        var h = $(obj).height;
+        $(obj).css('bottom', bottom + 'px');
+        return obj;
+    }
+
+    function createControl(type, options) {
+        var ctrl = document.createElement(type);
+        for (var p in options) {
+            ctrl.setAttribute(p, options[p]);
+        }
+        return ctrl;
+    }
+</script>

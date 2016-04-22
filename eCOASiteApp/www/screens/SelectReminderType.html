@@ -1,0 +1,56 @@
+﻿<div class="inner-content">
+    <fieldset data-role="controlgroup">
+        <legend>Select the preferred diary reminder type.</legend>
+        <input type="radio" name="reminderType" id="reminderType-choice-1" value="email" checked="checked" />
+        <label for="reminderType-choice-1">Email</label>
+
+        <input type="radio" name="reminderType" id="reminderType-choice-2" value="text" />
+        <label for="reminderType-choice-2">Text</label>
+    </fieldset>
+</div>
+
+
+<footer>
+    <table>
+        <tr>
+            <td>
+                <!--<input class="nav-button med-width" type="button" value="Back" next-screen="Tools" next-screen-title="Tools Menu" />-->
+            </td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" onclick="exitScreen()"/>
+            </td>
+            <td>
+                <input class="" type="button" value="Next" onclick="getReminderData()" />
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        ///TODO: load up the ddl from the remindertype table
+    });
+
+    function getReminderData() {
+        var choice = $('input:radio[name=reminderType]:checked').val();
+        reminderController.currentSelectedReminder.ReminderName = reminderName;
+        //TODO: get this from the database
+        reminderController.currentSelectedReminder.ReminderTypeId = choice == "email" ? 1 : 2;
+        
+        var nextScreen = choice == "email" ? "EnterEmailAddress" : "EnterPhoneNumber";
+        var title = "";
+        //check for initial setup to know the mode
+        screenController.changeScreen(nextScreen, title, null, null, function () { })
+    }
+
+    function exitScreen() {
+        var fn = function (cnt) {
+            var screenName = cnt == 0 ? 'Login' : 'Tools';
+            var title = cnt == 0 ? '' : 'Tools Menu';
+
+            screenController.changeScreen(screenName, title, null, null);
+        };
+
+        reminderController.getReminderCount(currentSubjectNumber, fn, null);
+    }
+</script>

@@ -1,0 +1,138 @@
+﻿
+<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="content-panel">
+    <div id="patient-questionnaires-div" class="button-list">
+
+    </div>
+</div>
+
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="left">
+            <button class="nav-button" type="button" value="Back" next-screen="PatientVisits" next-screen-title="" translation="keyBack" onClick="gotoBack()">
+                <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back   
+             </button>
+        </h5>
+        <h5 class="right">
+            <button type="button" class="btn-nav" value="Next" translation="keyNext" onclick="startQuestionnaire()" >
+                Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>    
+            </button>
+          </h5>
+        <h5 class="center">
+            <button class="nav-button" type="button" value="Exit" next-screen="SiteMain" next-screen-title="" translation="keyExit" onClick="gotoMain()">
+            Exit  
+              </button>
+        </h5>
+</footer>
+
+    <script type="text/javascript">
+        $(function () {
+            setTimeout(init, 1);
+        });
+
+        function init() {
+            var visit = visitController.getCurrentVisit();
+            visitController.setCurrentQuestionnaire(null);
+
+            function loadQuestionnaires(tx, rows) {
+                var div = $('#patient-questionnaires-div');
+                var middleCount = rows.length / 2;
+
+                for (var i = 0; i < rows.length; i++) {
+                    var completed = (1 * rows[i].cnt) > 0;
+                    $(div).append(createQuestionnaireButton(rows[i], completed));
+                }
+            }
+
+            function createQuestionnaireButton(questionnaire, completed) {
+                var par = {
+                    type: "button",
+                    "class": "questionnaire menu-button btn-fixed",
+                    id: "questionnaire-" + questionnaire.EDiaryQuestionnaireName
+                };
+
+                var btn = uiController.createControl(
+                    'button',
+                    par
+                  );
+
+                $(btn).html(questionnaire.EDiaryQuestionnaireDisplayName + (completed ? '<i class="ui-icon-fa ui-icon-fa-check completed-button-icon"></i>' : ""));
+
+                if (!completed) {
+                    $(btn).bind('tap', function () { selectQuestionnaire(questionnaire) });
+                }
+                return btn;
+            }
+
+            patientController.getCurrentPatient().getVisitQuestionnaires(visit.VisitId, loadQuestionnaires);
+        }
+
+        function selectQuestionnaire(questionnaire) {
+            var css = "selected-button";
+            $('.questionnaire').each(function () {
+                $(this).removeClass(css);
+            });
+            $("#questionnaire-" + questionnaire.EDiaryQuestionnaireName).addClass(css);
+            visitController.setCurrentQuestionnaire(questionnaire);
+        }
+
+        function startQuestionnaire() {
+            var skipSave = false;
+            var isTraining = false;
+            var questionnaire = visitController.getCurrentQuestionnaire();
+            var exitScreen = 'VisitQuestionnaires';
+            var exitTitle = '';
+
+            if (questionnaire != null) {
+                //assembla #242 - clear the inputs before starting a questionnaire - jo 01Feb2016
+                screenController.clearInputDefaults();
+
+                function completedCallback() {
+                    screenController.changeScreen('VisitQuestionnaires', '');
+                }
+
+                function startQuestionnaireCallback() {
+                    questionController.startQuestionnaire(
+                        questionnaire.EDiaryQuestionnaireName,
+                        questionnaire.VisitId,
+                        skipSave,
+                        completedCallback,
+                        isTraining,
+                        exitScreen,
+                        exitTitle
+                     );
+                }
+
+                if (questionnaire.EDiaryQuestionnaireTypeCode != 'C') {
+                    patientController.setCurrentLoginCallback(startQuestionnaireCallback)
+                    screenController.changeScreen('PatientLogin', '');
+                } else {
+                    startQuestionnaireCallback();
+                }
+            } else {
+                app.alert(translationController.get('keyPleaseSelectAQuestionnaire'));
+            }
+        }
+        function gotoMain() {
+            screenController.changeScreen("SiteMain", "");
+        }
+
+        function gotoBack() {
+            screenController.changeScreen("PatientVisits", "");
+        }
+    </script>

@@ -1,0 +1,23 @@
+﻿<h1 translation="keyErrorMessage">An Error Has Occurred</h1>
+<label class="has-error" id="errorMessage"></label>
+
+<footer>
+    <table>
+        <tr>
+            <td>  
+            </td>
+            <td>
+                <input class="nav-button" type="button" value="Exit" translation="keyExit" onclick="screenController.goToPreviousScreen()" next-screen="Tools" next-screen-title="keyToolsMenu" />
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script type="text/javascript">
+    $(function () {
+        $('#errorMessage').html(lastErrorMessage);
+    });
+
+</script>
