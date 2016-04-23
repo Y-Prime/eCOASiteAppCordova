@@ -5,27 +5,30 @@
         Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
         For details, see http://go.microsoft.com/fwlink/?LinkID=617521
     -->
-   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
-   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
-     <!--
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+    <!--
     <meta http-equiv="Content-Security-Policy"
-          content="default-src *;          
+          content="default-src *;
                       style-src * 'self' 'unsafe-inline' 'unsafe-eval';
                       script-src * 'self' 'unsafe-inline' 'unsafe-eval';">-->
-   
+
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
     <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
-    <link href="css/font-awesome.css" rel="stylesheet" />    
+    <link href="css/font-awesome.css" rel="stylesheet" />
 
- 
+
+
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link href="css/style.css" rel="stylesheet" />
+   <link href="css/style.css" rel="stylesheet" />
     <link href="css/Custom.css" rel="stylesheet" />
     <!-- Third Party-->
-
-    <script src="scripts/jquery-1.8.0.js"></script>
+    <!--<script src="scripts/jquery/jquery.js"></script>
+    <<script src="scripts/jquery-1.8.0.js"></script>-->
+         <script src="scripts/jquery-2.2.3.js"></script>
+  
     <script src="scripts/jquery.mobile-1.4.5.js"></script>
     <script src="scripts/moment.min.js"></script>
     <script src="scripts/base64.js"></script>
@@ -76,11 +79,11 @@
             DEVICE IS LOADING...
         </div>
     </div>
-    <!--<footer id="main-footer" class="main-footer">
+    <footer id="main-footer" class="main-footer nav-footer">
         <div>
-            YPrime ePRO &copy; 2016
+            
         </div>
-    </footer>  -->
+    </footer> 
     <script type="text/javascript" src="scripts/index.js"></script>
 </body>
 </html>

@@ -70,7 +70,7 @@ var screenController = (function () {
         changeScreen: function (screenName, title, backgroundCSS, contentDivOverloadObject, onSuccess, pars, isLandscapeOrientation) {
             //default orientation to portrait
             isLandscapeOrientation = (typeof isLandscapeOrientation == 'undefined') ? false : isLandscapeOrientation;
-
+          
             function fnChange() {
                 var url = screenController.getScreenUrl(screenName, pars);
                 var contentDivOverloaded = false;
@@ -98,9 +98,8 @@ var screenController = (function () {
                 $(contentDiv).html('<img class="loading" src="./images/spinner.gif"/>Loading...');
                 $(contentDiv).load(
                     url,
-                    null,
-                    function (a,b,c) {
-                       // $(contentDiv).html(a);
+                    null, function () {
+                        // $(contentDiv).html(a);
                         //set the orientation of the screen
                         screenController.setOrientation(isLandscapeOrientation);
                         //$(contentDiv)
@@ -110,8 +109,11 @@ var screenController = (function () {
                         if (!contentDivOverloaded) {
                             screenController.headerHandler(title);
                         }
+
                         screenController.contentHandler(contentDiv);
                         screenController.initInputDefaults(contentDiv, screenName);
+
+
                         //if the content is a control (numpad) don't reset the footer
                         if (!contentDivOverloaded) {
                             screenController.footerHandler(contentDiv);
@@ -123,6 +125,9 @@ var screenController = (function () {
                         screenController.setCurrentScreen(screenName);
                     }
                 ).hide().fadeIn('fast').find('input').first().focus();
+            };
+            function callback_function(contentDivOverloaded,contentDiv) {
+              
             };
             if (typeof contentDivOverloadObject == "object" && contentDivOverloadObject != null) {
                 fnChange();
