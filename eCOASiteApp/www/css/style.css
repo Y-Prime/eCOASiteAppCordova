@@ -180,11 +180,11 @@ header, footer, nav, section, article, hgroup, figure {
   color: #000db5; }
 
 .font-secondary {
-  font-family: "AktivGrotesk", "Helvetica", "Arial", sans-serif; }
+  font-family:  "Arial", "Helvetica", sans-serif; }
 
 body {
   background: white;
-  font: 100%/1.4 "AktivGrotesk", "Helvetica", "Arial", sans-serif;
+  font: 100%/1.4   "Arial", "Helvetica", sans-serif;
   -webkit-text-size-adjust: 100%;
   color: #303f57; }
 

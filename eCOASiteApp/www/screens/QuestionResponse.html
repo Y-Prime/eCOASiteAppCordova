@@ -1,21 +1,38 @@
-﻿<div class="inner-content">
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="QuestionExitButton" href="#" class="ui-btn" >
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+       Subject
+    </h3>
+</div>
+<div class="inner-content">
 </div>
 
 
 <footer data-role="footer" data-position="fixed" class="nav-footer">
     <h5 class="left">
-        <button id="QuestionBackButton" class="" type="button" value="Exit" translation="keyBack">
-            <span>[Back]</span><i class="fa fa-angle-left fa-2x left-icon"></i>
+        <button id="QuestionBackButton" class="btn-nav" type="button" value="Exit" translation="keyBack">
+           <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i><span>[Back]</span>
         </button>
     </h5>
-    <h5 class="center">
+  <!-- <h5 class="center">
         <button id="QuestionExitButton" class="" type="button" value="Exit" translation="keyExit" >
             Exit
             </button>
-        </h5>
+        </h5>--> 
         <h5 class="right">
-            <button id="QuestionNextButton" class="" type="button" value="Exit" translation="keyNext">
-                <span>[Next]</span><i class="fa fa-angle-right fa-2x right-icon"></i>
+            <button id="QuestionNextButton" class="btn-nav" type="button" value="Exit" translation="keyNext">
+                <span>[Next]</span><i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>
             </button>
         </h5>
 </footer>
@@ -27,4 +44,7 @@
         */
         loadQuestionPage();
     });
+    function gotoSiteLogin() {
+        screenController.changeScreen("UserLogin", "");
+    }
 </script>

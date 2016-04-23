@@ -7,20 +7,17 @@
 </div>
 
 
-<footer>
-    <table>
-        <tr>
-            <td>
-                <input class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="" />
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                <input class="" type="button" value="Next" onclick="savePhoneNumber()" />
-            </td>
-        </tr>
-    </table>
+<footer data-role="footer" data-position="fixed" class="nav-footer">
+    <h5 class="left">
+        <button class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="" >
+            <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+            </button>
+    </h5>
+    <h5 class="right">
+        <button class="btn-nav" type="button" value="Next" onclick="savePhoneNumber()">
+            Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i> 
+            </button>
+     </h5>
 </footer>
 
 <script type="text/javascript">

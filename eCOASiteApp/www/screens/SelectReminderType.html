@@ -1,4 +1,21 @@
-﻿<div class="inner-content">
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="inner-content">
     <fieldset data-role="controlgroup">
         <legend>Select the preferred diary reminder type.</legend>
         <input type="radio" name="reminderType" id="reminderType-choice-1" value="email" checked="checked" />
@@ -10,20 +27,18 @@
 </div>
 
 
-<footer>
-    <table>
-        <tr>
-            <td>
-                <!--<input class="nav-button med-width" type="button" value="Back" next-screen="Tools" next-screen-title="Tools Menu" />-->
-            </td>
-            <td>
-                <input class="nav-button" type="button" value="Exit" onclick="exitScreen()"/>
-            </td>
-            <td>
-                <input class="" type="button" value="Next" onclick="getReminderData()" />
-            </td>
-        </tr>
-    </table>
+<footer data-role="footer" data-position="fixed" class="nav-footer">
+    <h5 class="left">
+        <button class="nav-button" type="button" value="Exit" onclick="exitScreen()" >
+        <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+            </button>
+
+    </h5>
+                <h5 class="right">
+                    <button class="" type="button" value="Next" onclick="getReminderData()" >
+                        Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>
+                        </button>
+                </h5>
 </footer>
 
 <script type="text/javascript">

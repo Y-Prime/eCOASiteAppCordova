@@ -14,33 +14,65 @@
     margin:0 auto;
     text-align:center;
 }
+.nav{
+    margin-left: -0.8em;
+    margin-right: -0.8em;
+}
+/*background for app*/
+.ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
+         background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
+}
+/*radio button*/
+    .ui-page-theme-a .ui-btn:active, html .ui-bar-a .ui-btn:active, html .ui-body-a .ui-btn:active, html body .ui-group-theme-a .ui-btn:active, html head + body .ui-btn.ui-btn-a:active {
+      background-image: linear-gradient(to bottom, #4492ed, #3482de);
+      box-shadow: 1px 1px 1px 0 rgba(23, 76, 138, 0.3);
+      color:#ffffff;
+    }
+    .ui-shadow-inset {
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+}
+
+.ui-corner-all {
+    -webkit-border-radius: 0;
+border-radius: 0;
+}
+/*Login username and password*/
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset{
     width: 335px;
         display:block;
     margin:0 auto;
+    border:none;
+    background-color:transparent;
 }
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset > #input{
     width: 335px;
         display:block;
     margin:0 auto;
+    border:none;
+    background-color:transparent;
 }
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-focus{
     width: 335px;
       display:block;
     margin:0 auto;
+      color:#ffffff;
 }
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-focus > #input{
     width: 335px;
       display:block;
     margin:0 auto;
+      color:#ffffff;
 }
 legend, .ui-input-text input, .ui-input-search input{
     color:none;
 }
 .auth{
+    
     position:relative;
 }
-
+/*site user login page*/
 .site-user{
   width: 118px;
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
@@ -53,16 +85,20 @@ legend, .ui-input-text input, .ui-input-search input{
   border:0;
 }
 form{
-  width: 100%;
+  width: auto;
   height: 943px;
   background-image: linear-gradient(to bottom, #3482de, #0054b7);
+  margin-left:-0.8em;
+  margin-right:-0.8em;
   /*background-image: linear-gradient(to bottom, var(--dark-sky-blue), var(--peacock-blue));*/
 }
+/*Page content for most pages*/
 .content-panel{
   width: 100%;
   height: 1100px;
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
 }
+/* subject selector panel*/
 .subject-panel{
   width: 100%;
   height: 1100px;
@@ -75,9 +111,10 @@ form{
 }
 .inner-content{
      width: 100%;
-  height: 1200px;
+  height: 1100px;
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
 }
+/*Top navigation buttons*/
 .nav .left .ui-btn {
     display: inline-block;
     color: white;
@@ -169,3 +206,11 @@ div.numpad button {
     box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.15);
     color: #E0E0E0; }
   */
+
+.numpad_button {
+  display: inline-block;
+}
+.numpad {
+  width: 300px;
+  display: inline-block;
+}

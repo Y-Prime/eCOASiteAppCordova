@@ -4,18 +4,17 @@
     <div class="numeric-pad" numeric-input="OldPin"></div>
 </fieldset>
 
-<footer>
-    <table>
-        <tr>
-            <td></td>
-            <td>
-                <input class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Tools" next-screen-title="keyToolsMenu" />
-            </td>
-            <td>
-                <input type="button" value="Next" translation="keyNext" onclick="validOldPin()" />
-            </td>
-        </tr>
-    </table>
+<footer data-role="footer" data-position="fixed" class="nav-footer">
+    <h5 class="left">
+        <button class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="Tools" next-screen-title="keyToolsMenu">
+            <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+        </button>
+        </h5>
+        <h5 class="right">
+            <button type="button" class="btn-nav" value="Next" translation="keyNext" onclick="validOldPin()">
+                Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i> 
+            </button>
+        </h5>
 </footer>
 
 <script type="text/javascript">

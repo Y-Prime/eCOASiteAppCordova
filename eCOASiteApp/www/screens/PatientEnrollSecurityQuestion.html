@@ -1,39 +1,39 @@
-﻿<fieldset data-role="controlgroup">
-    <legend translation="keyEnterPhoneNumber">Enter the last 4 digits of your phone number</legend>
-    <input id="EnrollmentAnswer" type="number" class="med-width" translation="keyPhonePlaceholder" placeholder="..." maxlength="4" />
-    <div class="numeric-pad" numeric-input="EnrollmentAnswer"></div>
-</fieldset>
+﻿<div class="content-panel-noHeader">
+    <fieldset data-role="controlgroup">
+        <legend translation="keyEnterPhoneNumber">Enter the last 4 digits of your phone number</legend>
+        <input id="EnrollmentAnswer" type="number" class="med-width" translation="keyPhonePlaceholder" placeholder="..." maxlength="4" />
+        <div class="numeric-pad" numeric-input="EnrollmentAnswer"></div>
+    </fieldset>
+</div>
 
-<footer>
-    <table>
-        <tr>
-            <td>
-            </td>
-            <td>
-                <input id="ExitButton" class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="VisitQuestionnaires" next-screen-title="" />
-            </td>
-            <td>
-                <input class="" type="button" value="Next" translation="keyNext" onclick="enroll()" />
-            </td>
-        </tr>
-    </table>
-</footer>
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="center">
+            <button id="ExitButton" class="nav-button" type="button" value="Exit" translation="keyExit" next-screen="VisitQuestionnaires" next-screen-title="">
+                Exit
+            </button>
+        </h5>
+        <h5 class="right">
+            <button class="btn-nav" type="button" value="Next" translation="keyNext" onclick="enroll()">
+                Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i>
+            </button>
+        </h5>
+    </footer>
 
-<script type="text/javascript">
-    function enroll() {
-        var securityQuestionId = -1; //this not used in this study 
-        var answerValue = screenController.getSavedControlValue($('#EnrollmentAnswer'), 'PatientEnrollSecurityQuestion');
+    <script type="text/javascript">
+        function enroll() {
+            var securityQuestionId = -1; //this not used in this study
+            var answerValue = screenController.getSavedControlValue($('#EnrollmentAnswer'), 'PatientEnrollSecurityQuestion');
 
-        function onEnrollSuccess() {
-            screenController.changeScreen('PatientEnrolledSuccess', '');
+            function onEnrollSuccess() {
+                screenController.changeScreen('PatientEnrolledSuccess', '');
+            }
+            var message = patientController.validSecurityAnswerValue(securityQuestionId, answerValue);
+
+            if (message == '') {
+                patientController.getCurrentPatient().enroll(securityQuestionId, answerValue, onEnrollSuccess);
+            } else {
+                app.alert(message);
+            }
+
         }
-        var message = patientController.validSecurityAnswerValue(securityQuestionId, answerValue);
-        
-        if (message == '') {
-            patientController.getCurrentPatient().enroll(securityQuestionId, answerValue, onEnrollSuccess);
-        } else {
-            app.alert(message);
-        }
-
-    }
-</script>
+    </script>

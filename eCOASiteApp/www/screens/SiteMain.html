@@ -90,7 +90,8 @@
     function gotoNavigationSelection() {
         if (patientController.getCurrentPatient() != null) {
             function gotoVisitsCallback() {
-                screenController.changeScreen('SelectFunction', '')
+                //screenController.changeScreen('SelectFunction', '')
+                screenController.changeScreen("PatientVisits", "");
             }
 
             patientController.syncQuestionnaires(patientController.getCurrentPatient().Id, gotoVisitsCallback);

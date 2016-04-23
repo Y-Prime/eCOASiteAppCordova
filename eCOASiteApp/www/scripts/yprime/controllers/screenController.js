@@ -300,7 +300,7 @@ var screenController = (function () {
 
                     if ($(this).attr('data-value') == 'clear' && typeof clickEvent != 'undefined') {
                         //display an ok button
-                        $(this).html('').addClass('fa fa-check fa-2x');
+                        $(this).html('').addClass('ui-icon-fa ui-icon-fa-check ui-icon-fa-2x');
                     }
                 });
 

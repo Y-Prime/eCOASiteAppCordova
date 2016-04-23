@@ -1,64 +1,72 @@
-﻿<div class="question-text-wrapper">
-    <div translation="keyTrainingComplete"></div>
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
+
+    </h5>
+
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
 </div>
+<div class="inner-content">
+    <div class="question-text-wrapper">
+        <div translation="keyTrainingComplete"></div>
+    </div>
+    </div>
 
-<footer>
-    <table>
-        <tr>
-            <td>
-                <!--<button id="QuestionBackButton" class="" type="button" value="Exit" translation="keyBack">
-                    <span>[Back]</span><i class="fa fa-angle-left fa-2x left-icon"></i>
-                </button>-->
-            </td>
-            <td>
-                <input id="QuestionOkButton" class="" type="button" value="OK" translation="keyOK" onclick="completeTraining()" />
-            </td>
-            <td>
-            </td>
-        </tr>
-    </table>
-</footer>
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="center">
+            <input id="QuestionOkButton" class="" type="button" value="OK" translation="keyOK" onclick="completeTraining()" />
+        </h5>
+    </footer>
 
-<script type="text/javascript">
-    $(function () {
-        loadTrainingCompletePage();
-    });
+    <script type="text/javascript">
+        $(function () {
+            loadTrainingCompletePage();
+        });
 
-    function loadTrainingCompletePage() {
-        var pars = screenController.getScreenParameters();
-        var questionPage = questionController.getLoadedQuestionPage(pars.typename, pars.sortorder);
-        var question = questionPage[0]; //TODO: this might be problematic
+        function loadTrainingCompletePage() {
+            var pars = screenController.getScreenParameters();
+            var questionPage = questionController.getLoadedQuestionPage(pars.typename, pars.sortorder);
+            var question = questionPage[0]; //TODO: this might be problematic
 
-       // setUpNavigationButtons(question);
-    }
+            // setUpNavigationButtons(question);
+        }
 
-    function completeTraining() {
-        //function checkForPracticeDiary(callback) {
-        //    var title = '';
-        //    var message = translationController.get('keyCompletePracticeDiary');
+        function completeTraining() {
+            //function checkForPracticeDiary(callback) {
+            //    var title = '';
+            //    var message = translationController.get('keyCompletePracticeDiary');
 
-        //    function confirmPractice(idx) {
-        //        $('#main-content').removeClass('training-border');
-        //        switch (idx) {
-        //            case 1:
-        //                //fix the back button on the second questionnaire
-        //                screenController.addScreenViewed('Main', 'keySubjectMainMenu');
-        //                questionController.startQuestionnaire('Daily_Diary', null, true, null, true);
-        //                break;
-        //            default:
-        //                screenController.changeScreen('Main','keySubjectMainMenu');
-        //                break;
-        //        }
+            //    function confirmPractice(idx) {
+            //        $('#main-content').removeClass('training-border');
+            //        switch (idx) {
+            //            case 1:
+            //                //fix the back button on the second questionnaire
+            //                screenController.addScreenViewed('Main', 'keySubjectMainMenu');
+            //                questionController.startQuestionnaire('Daily_Diary', null, true, null, true);
+            //                break;
+            //            default:
+            //                screenController.changeScreen('Main','keySubjectMainMenu');
+            //                break;
+            //        }
 
 
-        //    }
+            //    }
 
-        //    pgConfirm(message, confirmPractice, title, [translationController.get('keyyes'), translationController.get('keyno')]);
-        //    //I am specifically not calling this to control the navigation from the choice
-        //    //callback();
-        //}
+            //    pgConfirm(message, confirmPractice, title, [translationController.get('keyyes'), translationController.get('keyno')]);
+            //    //I am specifically not calling this to control the navigation from the choice
+            //    //callback();
+            //}
 
-        patientController.checkForPracticeDiary();
-    }
+            patientController.checkForPracticeDiary();
+        }
 
-</script>
+    </script>

@@ -5,20 +5,18 @@
     </fieldset>
 </div>
 
-<footer>
-    <table>
-        <tr>
-            <td>
-                <input class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="" />
-            </td>
-            <td>
+<footer data-role="footer" data-position="fixed" class="nav-footer">
+    <h5 class="left">
+        <button class="nav-button" type="button" value="Back" next-screen="SelectReminderType" next-screen-title="">
+            <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+            </button>
+    </h5>
                 <!--<input class="nav-button med-width" type="button" value="Exit" next-screen="Tools" next-screen-title="Tools Menu" />-->
-            </td>
-            <td>
-                <input class="" type="button" value="Next" onclick="saveEmailAddress()" />
-            </td>
-        </tr>
-    </table>
+            <h5 class="right">
+                <button class="" type="button" value="Next" onclick="saveEmailAddress()" >
+                Next<i class="ui-icon-fa ui-icon-fa-chevron-right pad-right"></i> 
+</button>
+         </h5>
 </footer>
 
 <script type="text/javascript">

@@ -1,23 +1,35 @@
-﻿<h1 translation="keyErrorMessage">An Error Has Occurred</h1>
-<label class="has-error" id="errorMessage"></label>
+﻿<div id="nav" data-position="fixed" class="nav">
+    <h5 class="left">
+        <a id="sendData" href="#" class="ui-btn">
+            <i class="ui-icon-fa ui-icon-fa-paper-plane pad-left"></i> Send Data
+        </a>
 
-<footer>
-    <table>
-        <tr>
-            <td>  
-            </td>
-            <td>
-                <input class="nav-button" type="button" value="Exit" translation="keyExit" onclick="screenController.goToPreviousScreen()" next-screen="Tools" next-screen-title="keyToolsMenu" />
-            </td>
-            <td>
-            </td>
-        </tr>
-    </table>
-</footer>
+    </h5>
 
-<script type="text/javascript">
-    $(function () {
-        $('#errorMessage').html(lastErrorMessage);
-    });
+    <h5 class="right">
+        <a id="logoutSiteUser" href="#" class="ui-btn">
+            Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
+        </a>
+    </h5>
+    <h3 class="nav-username white">
+        UserName
+    </h3>
+</div>
+<div class="content-panel">
+    <h1 translation="keyErrorMessage">An Error Has Occurred</h1>
+    <label class="has-error" id="errorMessage"></label>
+    </div>
+    <footer data-role="footer" data-position="fixed" class="nav-footer">
+        <h5 class="center">
+            <button class="nav-button" type="button" value="Exit" translation="keyExit" onclick="screenController.goToPreviousScreen()" next-screen="Tools" next-screen-title="keyToolsMenu">
+                Exit
+            </button>
+        </h5>
+    </footer>
 
-</script>
+    <script type="text/javascript">
+        $(function () {
+            $('#errorMessage').html(lastErrorMessage);
+        });
+
+    </script>

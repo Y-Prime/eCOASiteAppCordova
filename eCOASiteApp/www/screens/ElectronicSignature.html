@@ -3,18 +3,12 @@
 <div class="numeric-pad" numeric-input="pin" click-event="submitElectronicSignature"></div>
 <!-- the click-event tag tells the renderer to make the C button and ok click event -->
 
-<footer>
-    <table>
-        <tr>
-            <td></td>
-            <td>
-                <input class="" type="button" value=" [Back]" translation="keyBack" onclick="screenController.goToPreviousScreen(false, true)" />
-            </td>
-            <td>
-                <!--<input type="button" value="OK" translation="keyOK" onclick="submitElectronicSignature()" />-->
-            </td>
-        </tr>
-    </table>
+<footer data-role="footer" data-position="fixed" class="nav-footer" >
+    <h5 class="left">
+        <button class="btn-nav" type="button" value=" [Back]" translation="keyBack" onclick="screenController.goToPreviousScreen(false, true)" >
+            <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
+          </button>
+    </h5>
 </footer>
 
 <script type="text/javascript">

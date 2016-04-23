@@ -21,7 +21,7 @@
 </div>
     <footer data-role="footer" data-position="fixed" class="nav-footer">
         <h5 class="left">
-            <button class="nav-button" type="button" value="Back" next-screen="SelectFunction" next-screen-title="" translation="keyBack" onClick()="gotoBack()" >
+            <button class="nav-button" type="button" value="Back" next-screen="SiteMain" next-screen-title="" translation="keyBack" onClick()="gotoBack()" >
                 <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
                 </button>
      </h5>
@@ -70,7 +70,7 @@
         }
 
         function gotoBack() {
-            screenController.changeScreen("SelectFunction", "");
+            screenController.changeScreen("SiteMain", "");
         }
         function createVisitButton(visit, enabled, completed) {
             var par = {

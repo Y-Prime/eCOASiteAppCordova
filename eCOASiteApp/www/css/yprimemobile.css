@@ -16,24 +16,24 @@ header {
 .thumb {
     width: 4em;
 }
-
+/*
 #main-content {
-    /*padding-top: .5em;*/
-    /*margin: .8em;*/
+  
     padding: .5em;
 }
-
-#terms-content {
-    height: 20em;
-    overflow: auto;
-}
-
 .inner-content {
     background-color: #ffffff;
     border: solid 1px #d8d8d8;
     border-radius: .25em;
     padding: 0.7em;
 }
+*/
+#terms-content {
+    height: 20em;
+    overflow: auto;
+}
+
+
 
 .small-text {
 }
@@ -259,7 +259,7 @@ button.full-width, input[type="button"].full-width {
     .button-list input, .button-list button {
         width: 100%;
         margin: .5em 0em;
-        height: 2.5em;
+       /* height: 2.5em;*/
         font-size: 1.4em;
     }
 
@@ -300,9 +300,9 @@ button.full-width, input[type="button"].full-width {
 }
 
 
-.ui-input-text {
+/*.ui-input-text {
     margin: .9em 0em !important;
-}
+}*/
 
 .ui-corner-all, .ui-btn {
     /*border-radius: 0px !important;*/
@@ -323,6 +323,8 @@ a {
 
 .plain-radio .ui-radio {
     margin-bottom: 1em;
+    box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.3);
+background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
 }
 
 .plain-radio .ui-btn-icon-left:after {
