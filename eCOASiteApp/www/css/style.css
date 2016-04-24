@@ -365,6 +365,7 @@ button, input[type="submit"] {
     background-image: linear-gradient(-180deg, #4492ED 0%, #3482DE 100%);
     box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.50);
     padding: 13px 15px 13px 15px;
+    
 }
 
 .subject-forms {
@@ -372,6 +373,7 @@ button, input[type="submit"] {
     box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.50);
     width: 330px;
     padding:5px;
+   
 }
 
 

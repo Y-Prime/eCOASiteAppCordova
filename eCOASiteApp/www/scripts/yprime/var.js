@@ -7,7 +7,8 @@ var desktopMode = true,
     DEBUGMODE = false;//,
     //SKIPSYNC = true;//this skips the initial sync to speed up the process
 
-var SERVER_URL = 'http://val-opcservices.eclinicalcloud.net/';
+//var SERVER_URL = 'http://val-opcservices.eclinicalcloud.net/';
+var SERVER_URL = 'http://dev-janssendemoservices.eclinicalcloud.net/';
 if (DEBUGMODE) {
     SERVER_URL = 'http://localhost:59388/'; //THIS IS FOR DEBUG
 }

@@ -17,11 +17,22 @@
     </h3>
 </div>
 <div class="content-panel">
-    <div id="patient-questionnaires-div" class="button-list">
+    <br />
+    <h1 class="center">Select a form</h1>
+    <br />
+    <div class="rater-forms content-scroll-panel-left">
+        <h2 class="center white">Site Forms</h2>
+        <div id="site-questionnaires-div" class="button-list">
 
+        </div>
     </div>
-</div>
+    <div class="subject-forms content-scroll-panel-right">
+        <h2 class="center white">Subject Forms</h2>
+        <div id="patient-questionnaires-div" class="button-list">
 
+        </div>
+    </div>
+    </div>
     <footer data-role="footer" data-position="fixed" class="nav-footer">
         <h5 class="left">
             <button class="nav-button" type="button" value="Back" next-screen="PatientVisits" next-screen-title="" translation="keyBack" onClick="gotoBack()">
@@ -47,11 +58,17 @@
 
             function loadQuestionnaires(tx, rows) {
                 var div = $('#patient-questionnaires-div');
+                var sitediv = $('#site-questionnaires-div');
                 var middleCount = rows.length / 2;
 
                 for (var i = 0; i < rows.length; i++) {
                     var completed = (1 * rows[i].cnt) > 0;
+                    if (rows[i].EDiaryQuestionnaireTypeCode!='S')
+                    {
                     $(div).append(createQuestionnaireButton(rows[i], completed));
+                    }else{               
+                    $(sitediv).append(createQuestionnaireButton(rows[i], completed));
+            }
                 }
             }
 

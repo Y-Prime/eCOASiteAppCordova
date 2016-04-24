@@ -235,7 +235,7 @@ button.full-width, input[type="button"].full-width {
     overflow: scroll;*/
     width: 75%;
     margin: 2em auto;
-    font-size: 1.5em;
+    font-size: 1.0em;
 }
 
 #patient-list {
@@ -257,12 +257,17 @@ button.full-width, input[type="button"].full-width {
         width: 100%;
         margin: .5em 0em;
        /* height: 2.5em;*/
-        font-size: 1.4em;
+        font-size: 1.0em;
+        text-align:left;
+        padding-right:100px;
     }
 
 .completed-button-icon {
     color: #5C6B7D;
     float: right;
+    margin-right: -60px;
+font-size: 28px;
+margin-top: -15px;
 }
 
 /*.selected-button {

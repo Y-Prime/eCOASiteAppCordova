@@ -150,6 +150,18 @@ form{
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
   
 }
+.content-scroll-panel-left{
+  width: 45%;
+  height: 84%;
+   float:left;
+  overflow-y:auto
+}
+.content-scroll-panel-right{
+  width: 45%;
+  height: 85%;
+  float:right;
+  overflow-y:auto
+}
 .content-panel-noHeader{
   width: 100%;
   height: 1200px;
