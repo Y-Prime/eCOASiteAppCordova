@@ -17,9 +17,11 @@
     </h3>
 </div>
 <div class="subject-panel">
-    <h1 translation="keySelectSubject">Select a Subject</h1>
-    <div id="patients-div rater-forms">
-        <ul id="patient-list" data-role="listview"></ul>
+    <br/>
+    <h1 class="center" translation="keySelectSubject">Select a Subject</h1>
+    <br/>
+    <div id="patients-div" class="rater-forms">
+        <ul id="patient-list" data-role="none"></ul>
     </div>
 </div>
 
@@ -41,7 +43,7 @@
 
 <script type="text/javascript">
     var selectedCss = 'li-selected';
-
+    var selectedAnchorCss = 'a-selected';
     $(function () {
         patientController.setCurrentPatient(null);     
         
@@ -54,8 +56,9 @@
                 var opt = uiController.createControl('li', { id: "patient-" + row.Id, "class": "patient-li" });
                 var anchor = uiController.createControl('a', { href: '#' });
                 $(anchor).bind('tap', function () { selectPatient(row); });
-                $(anchor).html(row.EnrolledId);
-               // $(anchor).html(row.EnrolledId +'<i class="ui-icon-fa ui-icon-fa-user icon60"></i>');
+                $(anchor).addClass('patient-a');
+              //  $(anchor).html(row.EnrolledId);
+                $(anchor).html(row.EnrolledId + '<i class="ui-icon-fa ui-icon-fa-user icon60"></i>');
                 opt.appendChild(anchor);
 
                 return opt;
@@ -66,7 +69,7 @@
                 list.append(createPatientChoice(rows[i]));
             }
             //debugger;
-          //  $(list).listview('refresh');
+            //$(list).listview('refresh');
             //screenController.refreshHTMLObjectJQM('patients-div');
         }
 
@@ -84,7 +87,12 @@
             function () {
                 $(this).removeClass(selectedCss);
             });
+        $('.' + selectedAnchorCss).each(
+         function () {
+             $(this).removeClass(selectedAnchorCss);
+         });
         $('#patient-' + obj.Id).addClass(selectedCss);
+        $('#patient-' + obj.Id + ' a').addClass(selectedAnchorCss);
     }
 
     function gotoNavigationSelection() {

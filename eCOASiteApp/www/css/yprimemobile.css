@@ -106,10 +106,10 @@ input, button {
 
     input[type="text"], input[type="password"] {
     }
-
+/*
     input[type="password"] {
         color: #204f99;
-    }
+    }*/
 
 .gray-background {
     background-color: #d8d8d8;
@@ -231,22 +231,19 @@ button.full-width, input[type="button"].full-width {
 * Select Subject
 ************************/
 #patients-div {
-    height: 22em;
-    /*overflow: scroll;*/
+    /*height: 22em;
+    overflow: scroll;*/
     width: 75%;
     margin: 2em auto;
     font-size: 1.5em;
 }
 
 #patient-list {
-    height: 22em;
-    overflow-y: scroll;
+   /* height: 22em;*/
+    overflow-y: auto;
 }
 
-.li-selected a, .selected-button {
-    background-color: #204f99 !important;
-    color: #ffffff !important;
-}
+
 
 /*********************
 * Patient Visits
@@ -264,7 +261,7 @@ button.full-width, input[type="button"].full-width {
     }
 
 .completed-button-icon {
-    color: green;
+    color: #5C6B7D;
     float: right;
 }
 

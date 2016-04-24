@@ -1,13 +1,19 @@
-﻿<label class="instruction-text" translation="keyElectronicSignatureText"></label>
-<input id="pin" type="password" />
-<div class="numeric-pad" numeric-input="pin" click-event="submitElectronicSignature"></div>
-<!-- the click-event tag tells the renderer to make the C button and ok click event -->
-
-<footer data-role="footer" data-position="fixed" class="nav-footer" >
+﻿<div class="center">
+    <i class="ui-btn ui-icon-fa ui-icon-fa-user subject-user"></i>
+</div>
+<fieldset data-role="controlgroup">
+    <div class="h-center">
+        <label class="instruction-text" translation="keyElectronicSignatureText"></label>
+        <input id="pin" type="password" />
+        <div class="numeric-pad" numeric-input="pin" click-event="submitElectronicSignature"></div>
+        <!-- the click-event tag tells the renderer to make the C button and ok click event -->
+    </div>
+</fieldset>
+<footer data-role="footer" data-position="fixed" class="nav-footer">
     <h5 class="left">
-        <button class="btn-nav" type="button" value=" [Back]" translation="keyBack" onclick="screenController.goToPreviousScreen(false, true)" >
+        <button class="btn-nav" type="button" value=" [Back]" translation="keyBack" onclick="screenController.goToPreviousScreen(false, true)">
             <i class="ui-icon-fa ui-icon-fa-chevron-left pad-left"></i>Back
-          </button>
+        </button>
     </h5>
 </footer>
 

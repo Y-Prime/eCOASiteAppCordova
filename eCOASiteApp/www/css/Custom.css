@@ -38,6 +38,39 @@ box-shadow: none;
     -webkit-border-radius: 0;
 border-radius: 0;
 }
+
+.ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
+    color:none;
+}
+    .ui-page-theme-a a, html .ui-bar-a a, html .ui-body-a a, html body .ui-group-theme-a a {
+        color:none;
+    }
+        .ui-page-theme-a a:visited, html .ui-bar-a a:visited, html .ui-body-a a:visited, html body .ui-group-theme-a a:visited {
+      color:none;
+              }
+         .ui-page-theme-a a:visited, html .ui-bar-a a:visited, html .ui-body-a a:visited, html body .ui-group-theme-a a:hover {
+      color:none;
+              }
+.ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head+body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn:visited, html .ui-bar-a .ui-btn:visited, html .ui-body-a .ui-btn:visited, html body .ui-group-theme-a .ui-btn:visited, html head+body .ui-btn.ui-btn-a:visited{
+    background-color: transparent;
+/*border-color: transparent;
+color:none;*/
+text-shadow: none;
+}
+.btn-number.ui-btn.ui-shadow.ui-corner-all{
+    width:90px;
+    color:white;
+}
+.btn-icon.green.ui-btn.ui-shadow.ui-corner-all{
+    width:90px;
+    background-color: #46A618;
+    color:white;
+}
+.btn-icon.darkgray.ui-btn.ui-shadow.ui-corner-all{
+    width:90px;
+    background: #303F57;
+    color: white;
+}
 /*Login username and password*/
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset{
     width: 335px;
@@ -72,7 +105,18 @@ legend, .ui-input-text input, .ui-input-search input{
     
     position:relative;
 }
-/*site user login page*/
+/*subject user login icon*/
+.subject-user{
+      width: 118px;
+    background-image: linear-gradient(to bottom, #5c6b7d, #4c5b6c);
+  font-family: FontAwesome;
+  font-size: 100px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(48, 63, 87, 0.1);
+  border:0;
+}
+/*site user login icon*/
 .site-user{
   width: 118px;
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
@@ -84,6 +128,7 @@ legend, .ui-input-text input, .ui-input-search input{
   text-shadow: 0 2px 4px rgba(48, 63, 87, 0.1);
   border:0;
 }
+/*site user login page*/
 form{
   width: auto;
   height: 943px;
@@ -103,6 +148,7 @@ form{
   width: 100%;
   height: 1100px;
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
+  
 }
 .content-panel-noHeader{
   width: 100%;
@@ -112,7 +158,7 @@ form{
 .inner-content{
      width: 100%;
   height: 1100px;
-  background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
+ background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
 }
 /*Top navigation buttons*/
 .nav .left .ui-btn {
@@ -184,7 +230,7 @@ div.numpad button {
 
 
 /* Users (site or subject) */
-/*
+
 .patient-li {
   display: inline-block;
   width: 100%;
@@ -205,7 +251,45 @@ div.numpad button {
     opacity: 0.9;
     box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.15);
     color: #E0E0E0; }
-  */
+  
+  .patients-div{
+      height:100%;
+  }
+  .selected-button{
+ background-image: linear-gradient(-180deg, #5C6B7D 0%, #324050 100%);
+    color: white;
+  }
+  .li-selected a {
+    background-image: linear-gradient(-180deg, #5C6B7D 0%, #324050 100%);
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.25), inset -60px 0px 0px 0px rgba(48,63,87,0.15);
+    color: white;
+}
+.a-selected{
+  background-image: linear-gradient(-180deg, #5C6B7D 0%, #324050 100%);
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.25), inset -60px 0px 0px 0px rgba(48,63,87,0.15);
+    color: white;
+     outline: 0;
+text-decoration: none;
+     display: block;
+     width: 100%;
+     height: 100%;
+   }
+a.patient-a{
+    color: #303F57;
+    text-decoration: none;
+    outline: 0;
+     display: block;
+     width: 100%;
+     height: 100%;
+ }
+a.patient-a:visited {
+color: white;
+ outline: 0;
+text-decoration: none;
+     display: block;
+     width: 100%;
+     height: 100%;
+ }
 
 .numpad_button {
   display: inline-block;

@@ -114,7 +114,7 @@
                      );
                 }
 
-                if (questionnaire.EDiaryQuestionnaireTypeCode != 'C') {
+                if (questionnaire.EDiaryQuestionnaireTypeCode != 'C' & questionnaire.EDiaryQuestionnaireTypeCode != 'S') {
                     patientController.setCurrentLoginCallback(startQuestionnaireCallback)
                     screenController.changeScreen('PatientLogin', '');
                 } else {
