@@ -261,7 +261,7 @@ function Question(obj, onSuccess, onError) {
             var innerWrapper = uiController.createControl('div', {});
             var input = uiController.createInputControl(question.controlInputId(), { type: 'number', 'data-role': 'none', 'disabled': 'disabled', MinValue: minValue, MaxValue: maxValue });
             var btnUp = uiController.createControl('button', { value: 'Up', 'InputId': question.controlInputId() });
-            var upIcon = uiController.createControl('i', { 'class': 'fa fa-caret-up fa-3x' });
+            var upIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-up ui-icon-fa-3x' });
 
             input.setAttribute(questionIdAttribute, this.Id);
 
@@ -280,7 +280,7 @@ function Question(obj, onSuccess, onError) {
             });
 
             var btnDown = uiController.createControl('button', { value: 'Down', 'InputId': question.controlInputId() });
-            var downIcon = uiController.createControl('i', { 'class': 'fa fa-caret-down fa-3x' });
+            var downIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-down ui-icon-fa-3x' });
 
             btnDown.appendChild(downIcon);
 

@@ -17,7 +17,7 @@
         <i class="ui-icon-fa ui-icon-fa-sign-in pad-right"></i>   
      </a>
     <div class="h-center">
-        <a id="forgotPin" name="forgotPin" class="nav-button full-width" href="#" next-screen="ForgotPIN" next-screen-title="keyForgotPIN" translation="keyForgotPIN">Forgot PIN</a>
+        <a id="forgotPin" name="forgotPin" class="nav-button" href="#" next-screen="ForgotPIN" next-screen-title="keyForgotPIN" translation="keyForgotPIN">Forgot PIN</a>
     </div>
     <!--<input id="addPatient" type="button" onclick="addPatientClick()" value="Add Patient" />-->
     <!--<div class="sub-footer">
@@ -53,21 +53,14 @@
 <script type="text/javascript">
     $(function () {
         $('#subjectLogin').bind('click', loginSubject);
-        if (!app.getSiteBasedMode()) {
-            patientController.logout();
-        }
+        patientController.logout();
         $('#versionNumber').html('&nbsp;' + app.getVersion());
 
-       // $('#subjectPin').val('');
         //debug!!!!
-        if (DEBUGMODE) {
-            //$('#subjectID').val('9999');
-            //$('#subjectPin').val('1234');
+        if (true) {
+            $('#subjectID').val('1210050');
+            $('#subjectPin').val('9724');
         }
-
-        var currentPatient = patientController.getCurrentPatient();
-        $('#subjectID').val(currentPatient.PatientNumber);
-       
     });
 
     function loginSubject() {
@@ -78,19 +71,12 @@
         if (validLoginForm(subjectID, pin)) {
             //display error or navigate to main
             function fnSuccessfulLogin() {
-                //this handles login control from the questionnaires
-                var callback = patientController.getCurrentLoginCallback();
-                if (typeof callback == 'function') {
-                    callback();
-                    patientController.setCurrentLoginCallback(null);
-                } else {
-                    screenController.changeScreen('Main', 'keySubjectMainMenu');
-                }
+                screenController.changeScreen('Main', 'keySubjectMainMenu');
             }
             function onFail() {
                 $('#subjectPin').val('');
             }
-            
+
             function onError() {
                 app.alert(translationController.get('keyError'));
             }
@@ -112,7 +98,7 @@
     function changeInputHandler(isPassword) {
         setTimeout(function () {
             var obj = document.getElementById("subjectPin");
-            
+
             if (typeof obj != 'undefined' && obj != null) {
                 obj.setAttribute("type", (isPassword ? "password" : "number"));
             }
@@ -147,8 +133,8 @@
     }
 
     function getPatient() {
-        var p = '9999';
-        var pin = '1234';
+        var p = '1210050';
+        var pin = '9724';
         var url = SERVER_URL + 'api/patient/login';
 
         var fn = function (e) { alert('done inload'); };
@@ -162,11 +148,3 @@
     <input id="subjectLogin" name="subjectLogin" class="btn btn-primary btn-lg btn-block" type="button" value="Login" />
     */
 </script>
-<!-- debugging-->
-<!--<select id="language" onchange="setLanguage()">
-    <option value=""></option>
-    <option value="en-us">English</option>
-    <option value="en-es">Spanish</option>
-    <option value="zh-cn">Chinese</option>
-</select>-->
-<!--<input type="button" onclick="addPatient()" value="Add Patient [DEBUG]" />-->
