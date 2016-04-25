@@ -271,6 +271,7 @@ function Question(obj, onSuccess, onError) {
                 var obj = $(this).next();
                 var val = $(obj).val();
                 var newValue = parseInt(val == '' ? 0 : val) + 1
+
                 var maxValue = parseInt($(this).next().attr('MaxValue'));
 
                 if (newValue <= maxValue) {
