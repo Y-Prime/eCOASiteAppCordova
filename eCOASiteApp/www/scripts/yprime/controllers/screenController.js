@@ -193,6 +193,10 @@ var screenController = (function () {
         headerHandler: function (title) {
             if (title != null) {
                 $('header').html(title.length > 0 ? translationController.get(title, translationController.defaultLanguageId()) : '');
+                if ($('#questionnairename_header').length)
+                {
+                    $('#questionnairename_header').html(title);
+                }
             }
         },
         clearHeader: function (title) {

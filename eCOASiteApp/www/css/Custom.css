@@ -71,6 +71,9 @@ text-shadow: none;
     background: #303F57;
     color: white;
 }
+.ui-checkbox input, .ui-radio input{
+    z-index:-1;
+}
 /*Login username and password*/
 .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset{
     width: 335px;

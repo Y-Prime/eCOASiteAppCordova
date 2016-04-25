@@ -1,7 +1,7 @@
 ﻿
 <div id="vertical-slider">
     <div class="left main">
-        <div class="left" translation="EQ-5D-5L7"></div>
+        <div class="left" translation="eq5d5l8"></div>
         <div id="slider-value-div" class="left">
             <strong><span translation="keyYourHealthToday" class="left"></span></strong>
             <input type="number" id="healthtoday" disabled="disabled" />
@@ -46,6 +46,7 @@
                 width: 3.5em;
                 border: 1px #000000 solid;
                 border-radius: 0px;
+              margin-top: 1.5em;
             }
 
     .left.main p {
@@ -63,7 +64,7 @@
     }
 
     #slider-min {
-        bottom: 1em;
+        bottom: -3em;
     }
 
     #slider-max, #slider-min {
@@ -71,14 +72,17 @@
         position: absolute;
         width: 8em;
         right: 11em;
+        margin-top: 2em;
     }
 
     #slider-value-div {
         line-height: 5em;
         margin-right: 1em;
         position: absolute;
-        left: 23em;
-        top: 6em;
+       /* left: 23em;
+        top: 6em;*/
+        left: 35%;
+        top: 50%;
     }
 
         #slider-value-div input {
@@ -101,7 +105,7 @@
     input[type=range][orient=vertical], .slider-wrapper {
         width: 1em;
         /*height: 16em;*/
-        height: 375px;
+        height: 900px;/*375px;*/
         padding: 0 .2em;
     }
 
@@ -109,6 +113,7 @@
         position: relative;
         right: 5em;
         /*top: .5em;*/
+        top:2em;
     }
 
     .slider-background {
@@ -123,7 +128,7 @@
         width: 2px;
         background-color: #000000;
         margin: 0px auto;
-        height: 372px;
+        height: 894px;/*372px;*/
         margin-left: 20px;
         margin-top: 3px;
     }

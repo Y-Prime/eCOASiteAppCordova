@@ -165,7 +165,8 @@ function Question(obj, onSuccess, onError) {
                 break;
             case 3: //radiobutton
             case "Radiobutton":
-                htmlObject = this.renderRadioButtonControl();
+                //htmlObject = this.renderRadioButtonControl();
+                htmlObject = this.renderPlainRadioButtonControl();
                 break;
             case 8:
             case "Number":
@@ -188,7 +189,8 @@ function Question(obj, onSuccess, onError) {
                 break;
             case 15: //radiobutton plain
             case "PlainRadiobutton":
-                htmlObject = this.renderPlainRadioButtonControl();
+               // htmlObject = this.renderPlainRadioButtonControl();
+                htmlObject = this.renderRadioButtonControl();
                 break;
             case "RadiobuttonCheckbox":
                 htmlObject = this.renderRadioButtonCheckboxControl();
@@ -204,6 +206,10 @@ function Question(obj, onSuccess, onError) {
             case 18:
             case "CheckboxList":
                 htmlObject = this.renderCheckBoxList();
+                break;
+            case 51:
+            case "EQ5D":
+                htmlObject = this.renderEQ5D5L7Screen();
                 break;
             default:
                 htmlObject = this.renderGenericControl();
@@ -275,13 +281,16 @@ function Question(obj, onSuccess, onError) {
         var rightMarginEM = 0;
         switch ((this.MaxValue + '').length) {
             case 1:
-                rightMarginEM = 1;
+                rightMarginEM = 50;
                 break;
             case 2:
-                rightMarginEM = 2;
+                rightMarginEM = 40;
+                break;
+            case 3:
+                rightMarginEM = 30;
                 break;
         }
-        var inputWrapper = uiController.createControl('div', { 'class': 'number-picker', 'style': 'margin-right:' + rightMarginEM + 'em;' });
+        var inputWrapper = uiController.createControl('div', { 'class': 'number-picker', 'style': 'margin-right:' + rightMarginEM + '%;' });
 
         var questionControlInputId = this.controlInputId();
         var hiddenPars = {
@@ -304,14 +313,14 @@ function Question(obj, onSuccess, onError) {
             });
             //create the UP button
             var btnUp = uiController.createControl('button', { value: 'Up', 'InputId': displayInputId, 'QuestionInputId': questionInputId, position: position });
-            var upIcon = uiController.createControl('i', { 'class': 'fa fa-caret-up fa-3x' });
+            var upIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-up ui-icon-fa-3x' });
 
             //input.setAttribute(questionIdAttribute, this.Id);
             btnUp.appendChild(upIcon);
 
             //create the DOWN button
             var btnDown = uiController.createControl('button', { value: 'Down', 'InputId': displayInputId, 'QuestionInputId': questionInputId, position: position });
-            var downIcon = uiController.createControl('i', { 'class': 'fa fa-caret-down fa-3x' });
+            var downIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-down ui-icon-fa-3x' });
 
             btnDown.appendChild(downIcon);
 
@@ -627,7 +636,36 @@ function Question(obj, onSuccess, onError) {
 
         return obj;
     };
+    this.renderEQ5D5L7Screen = function () {
+        var questionId = this.Id;
+        var id = this.controlDivId();
+        var inputId = this.controlInputId();
+        var textid = this.Text;
+        var isLandscapeOrientation = this.IsLandscapeOrientation;
+        var obj = uiController.createControl('div', {
+            'id': this.controlDivId(),
+            'class': 'custom-question-screen'
+        });
 
+        function fnInit(obj) {
+            $(obj).removeAttr(customQuestionCreateAttribute);
+            var fn = function () {
+                //this control will ultimately hold the question value
+                //it can be get and set from CustomScreenController.js
+                //jo 25Jan2016
+                var pars = { type: 'hidden', "class": customQuestionInputAttribute };
+                pars[questionIdAttribute] = questionId;
+                var input = uiController.createInputControl(inputId, pars);
+                screenController.initInputDefaults(input, 'QuestionResponse');
+                obj.appendChild(input);
+            };
+            screenController.changeScreen('EQ-5D-5L7', null, null, obj, fn, {}, isLandscapeOrientation);
+        };
+
+        this.bindInitEvent(obj, fnInit);
+
+        return obj;
+    };
     this.renderCheckBox = function () {
         var obj = uiController.createControl('div', {});
         var checkboxId = this.controlInputId();

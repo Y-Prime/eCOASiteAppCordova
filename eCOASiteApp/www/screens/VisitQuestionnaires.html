@@ -8,11 +8,11 @@
     </h5>
 
     <h5 class="right">
-        <a id="logoutSiteUser" href="#" class="ui-btn">
+        <a id="logoutSiteUser" href="#" class="ui-btn" onClick="logoutSiteUser()">
             Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
         </a>
     </h5>
-    <h3 class="nav-username white">
+    <h3 id="visitq_header" class="nav-username white">
         UserName
     </h3>
 </div>
@@ -55,7 +55,7 @@
         function init() {
             var visit = visitController.getCurrentVisit();
             visitController.setCurrentQuestionnaire(null);
-
+            $('#visitq_header').html(patientController.getCurrentPatient().PatientNumber);
             function loadQuestionnaires(tx, rows) {
                 var div = $('#patient-questionnaires-div');
                 var sitediv = $('#site-questionnaires-div');
@@ -147,5 +147,8 @@
 
         function gotoBack() {
             screenController.changeScreen("PatientVisits", "");
+        }
+        function logoutSiteUser() {
+            screenController.changeScreen("UserLogin", "");
         }
     </script>

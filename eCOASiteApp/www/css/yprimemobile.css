@@ -422,6 +422,7 @@ background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
 
 .number-picker {
     text-align: center;
+    /*position: absolute;*/
 }
 
     .number-picker div:not(.clear) {

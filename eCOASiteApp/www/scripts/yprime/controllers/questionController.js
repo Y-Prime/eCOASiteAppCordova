@@ -364,7 +364,7 @@ var questionController = (function () {
                 VisitId: currentVisitNumber,
                 QuestionnaireName: questionnaireName,
                 Status: 'Saved',
-                Source: 'SiteEPRO',
+                Source: 'eCOA Site',
                 Started: questionnaireStartTime,
                 Completed: questionnaireCompletedTime,
                 TransmitDate: null
@@ -514,11 +514,11 @@ var questionController = (function () {
             var title = '';
 
             //set the title for specific scale:
-            var showTitleList = ['EQ_5D_5L'];
+            var showTitleList = ['EQ5D5L'];
             if (arrayContains(showTitleList, questionnaireName)) {
                 title = visitController.getCurrentQuestionnaire().EDiaryQuestionnaireName;
             }
-
+             title = visitController.getCurrentQuestionnaire().EDiaryQuestionnaireName;
             //check for custom screen
             var nextQuestionPage = this.getLoadedQuestionPage(questionnaireName, sortOrder);
             var nextQuestion = nextQuestionPage[0];

@@ -7,12 +7,12 @@
     </h5>
 
     <h5 class="right">
-        <a id="logoutSiteUser" href="#" class="ui-btn">
+        <a id="logoutSiteUser" href="#" class="ui-btn" onClick="logoutSiteUser()">
             Log Out <i class="ui-icon-fa ui-icon-fa-sign-out pad-right"></i>
         </a>
     </h5>
-    <h3 class="nav-username white">
-        UserName
+    <h3 id="visit_header" class="nav-username white">
+        Subject
     </h3>
 </div>
 <div class="content-panel">
@@ -45,12 +45,13 @@
         });
 
         function init() {
+            $('#visit_header').html(patientController.getCurrentPatient().PatientNumber);
             function loadVisits(tx, rows) {
                 //var div1 = $('#patient-visits-div1');
                 //var div2 = $('#patient-visits-div2');
                 //$(div1).empty();
                 //$(div2).empty();
-
+               
                 var div = $('#patient-visits-div');
 
                 var middleCount = rows.length / 2;
@@ -67,7 +68,7 @@
                 }
                 screenController.headerHandler('keySelectVisit');
             }
-
+        
             patientController.getCurrentPatient().getVisits(loadVisits);
         }
         function gotoMain() {
@@ -116,5 +117,8 @@
             } else {
                 app.alert(translationController.get('keyPleaseSelectAVisit'));
             }
+        }
+        function logoutSiteUser() {
+            screenController.changeScreen("UserLogin", "");
         }
     </script>
