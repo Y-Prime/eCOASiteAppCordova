@@ -153,6 +153,11 @@ form{
   background-image: linear-gradient(to bottom, #f3f3f3, #d7d7d7);
   
 }
+.content-scroll-panel-center{
+  width: 95%;
+  height: 84%;
+  overflow-y:auto
+}
 .content-scroll-panel-left{
   width: 45%;
   height: 84%;
