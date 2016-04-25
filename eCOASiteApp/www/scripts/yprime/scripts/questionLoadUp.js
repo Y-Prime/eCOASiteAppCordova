@@ -41,13 +41,7 @@ function setUpNavigationButtons(question) {
             //check here in case the route ENDS the questionnaire
             if (nextId == null) {
                 //send to the electronic signature
-                var currentQuestionnaire = visitController.getCurrentQuestionnaire();
-                if (currentQuestionnaire.EDiaryQuestionnaireTypeCode == 'C') {
-                    //this is a clinician
-                    questionController.completeQuestionnaire(currentQuestionnaire.EDiaryQuestionnaireName);
-                } else {
-                    screenController.changeScreen('ElectronicSignature', 'keyElectronicSignature', null, null, null, pars);
-                }
+                screenController.changeScreen('ElectronicSignature', 'keyElectronicSignature', null, null, null, pars);
             } else {
                 goToQuestion(question.EdiaryQuestionnaire, nextId);
             }

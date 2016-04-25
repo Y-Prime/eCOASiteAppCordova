@@ -9,7 +9,6 @@ var customQuestionCreateEvent = 'yprime.customInit';
 var customQuestionCreateAttribute = 'custominit';
 var questionIdAttribute = 'question-id';
 var questionDelimiter = '___';
-var questionSecondDelimiter = '-';
 var controlTypeAttribute = 'control-type';
 
 
@@ -159,14 +158,9 @@ function Question(obj, onSuccess, onError) {
             case 1: //slider
                 htmlObject = this.renderSliderControl();
                 break;
-            case 2:
-            case "Checkbox":
-                htmlObject = this.renderCheckBox();
-                break;
             case 3: //radiobutton
             case "Radiobutton":
-                //htmlObject = this.renderRadioButtonControl();
-                htmlObject = this.renderPlainRadioButtonControl();
+                htmlObject = this.renderRadioButtonControl();
                 break;
             case 8:
             case "Number":
@@ -180,36 +174,19 @@ function Question(obj, onSuccess, onError) {
             case "NRS":
                 htmlObject = this.renderNRSControl();
                 break;
-            case 12: // Time COntrol
-            case "Time":
-                htmlObject = this.renderTimeControl();
-                break;
             case "DropdownList":
                 htmlObject = this.renderDropDownListControl();
                 break;
             case 15: //radiobutton plain
             case "PlainRadiobutton":
-               // htmlObject = this.renderPlainRadioButtonControl();
-                htmlObject = this.renderRadioButtonControl();
-                break;
-            case "RadiobuttonCheckbox":
-                htmlObject = this.renderRadioButtonCheckboxControl();
+                htmlObject = this.renderPlainRadioButtonControl();
                 break;
             case 16:
             case "CustomScreen":
                 htmlObject = this.renderCustomScreen();
                 break;
             case 17: //horizontal radiobutton
-            case "HorizontalRadiobutton":
                 htmlObject = this.renderHorizontalRadioButtonControl();
-                break;
-            case 18:
-            case "CheckboxList":
-                htmlObject = this.renderCheckBoxList();
-                break;
-            case 51:
-            case "EQ5D":
-                htmlObject = this.renderEQ5D5L7Screen();
                 break;
             default:
                 htmlObject = this.renderGenericControl();
@@ -222,7 +199,7 @@ function Question(obj, onSuccess, onError) {
     UI Controls
     ************************************************/
     this.renderControlBaseObject = function () {
-        var pars = { 'class': 'question-text-wrapper ' + this.EdiaryQuestionnaire };
+        var pars = { 'class': 'question-text-wrapper' };
         pars[questionIdAttribute] = this.id; //mark the control as a question
         var obj = uiController.createControl('div', pars); //this is much faster than jquery create
         obj.setAttribute('id', this.controlDivId());
@@ -276,113 +253,47 @@ function Question(obj, onSuccess, onError) {
 
     this.renderNumberControl = function () {
         var obj = this.renderControlBaseObject();
+        var maxValue = this.MaxValue;
+        var minValue = this.MinValue;
+        var inputWrapper = uiController.createControl('div', { 'class': 'number-picker' });
 
-        //determine the right margin for the control
-        var rightMarginEM = 0;
-        switch ((this.MaxValue + '').length) {
-            case 1:
-                rightMarginEM = 50;
-                break;
-            case 2:
-                rightMarginEM = 40;
-                break;
-            case 3:
-                rightMarginEM = 30;
-                break;
-        }
-        var inputWrapper = uiController.createControl('div', { 'class': 'number-picker', 'style': 'margin-right:' + rightMarginEM + '%;' });
-
-        var questionControlInputId = this.controlInputId();
-        var hiddenPars = {
-            type: 'hidden'
-        };
-        hiddenPars[questionIdAttribute] = this.Id;
-        var hiddenInput = uiController.createInputControl(questionControlInputId, hiddenPars);
-
-        function createDigitControl(questionInputId, position, minValue, maxValue) {
+        function createDigitControl(question) {
             var innerWrapper = uiController.createControl('div', {});
-            var displayInputId = questionInputId + questionSecondDelimiter + position;
-            var input = uiController.createInputControl(displayInputId, {
-                type: 'number',
-                'data-role': 'none',
-                'disabled': 'disabled',
-                MinValue: minValue,
-                MaxValue: maxValue,
-                position: position,
-                "class": questionInputId //use this to pull all the controls
-            });
-            //create the UP button
-            var btnUp = uiController.createControl('button', { value: 'Up', 'InputId': displayInputId, 'QuestionInputId': questionInputId, position: position });
-            var upIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-up ui-icon-fa-3x' });
+            var input = uiController.createInputControl(question.controlInputId(), { type: 'number', 'data-role': 'none', 'disabled': 'disabled', MinValue: minValue, MaxValue: maxValue });
+            var btnUp = uiController.createControl('button', { value: 'Up', 'InputId': question.controlInputId() });
+            var upIcon = uiController.createControl('i', { 'class': 'fa fa-caret-up fa-3x' });
 
-            //input.setAttribute(questionIdAttribute, this.Id);
+            input.setAttribute(questionIdAttribute, this.Id);
+
             btnUp.appendChild(upIcon);
 
-            //create the DOWN button
-            var btnDown = uiController.createControl('button', { value: 'Down', 'InputId': displayInputId, 'QuestionInputId': questionInputId, position: position });
-            var downIcon = uiController.createControl('i', { 'class': 'ui-icon-fa ui-icon-fa-caret-down ui-icon-fa-3x' });
+            $(btnUp).bind('tap', function () {
+                var obj = $(this).next();
+                var val = $(obj).val();
+                var newValue = parseInt(val == '' ? 0 : val) + 1
+                var maxValue = parseInt($(this).next().attr('MaxValue'));
+
+                if (newValue <= maxValue) {
+                    $(obj).val(newValue);
+                    $(obj).trigger('keyup.yprime'); //retain value in answers object
+                }
+            });
+
+            var btnDown = uiController.createControl('button', { value: 'Down', 'InputId': question.controlInputId() });
+            var downIcon = uiController.createControl('i', { 'class': 'fa fa-caret-down fa-3x' });
 
             btnDown.appendChild(downIcon);
 
-            function numberButtonClickHandler(clickObject, up) {
-                var questionInputId = $(clickObject).attr('QuestionInputId');
-                var position = $(clickObject).attr('position');
-                var obj = $('#' + questionInputId + questionSecondDelimiter + position);
+            $(btnDown).bind('tap', function () {
+                var obj = $(this).prev();
                 var val = $(obj).val();
-                var newValue = parseInt(val == '' ? 0 : val) + (up ? 1 : -1);
-                var minValue = parseInt($(clickObject).prev().attr('MinValue'));
-                var maxValue = parseInt($(clickObject).next().attr('MaxValue'));
-                var fullValue = getFullControlValue(position, up);
+                var newValue = parseInt(val == '' ? 1 : val) - 1
+                var minValue = parseInt($(this).prev().attr('MinValue'));
 
-                if ((fullValue <= maxValue && newValue <= 9 && up) || (fullValue >= minValue && newValue >= 0 && !up)) {
-                    //if ((newValue <= maxValue && up) || (newValue >= minValue && !up)) {
+                if (newValue >= minValue) {
                     $(obj).val(newValue);
                     $(obj).trigger('keyup.yprime'); //retain value in answers object
-                    updateHiddenControl(fullValue);
                 }
-            }
-
-            function getFullControlValue(digit, up) {
-                var values = $('.' + questionInputId);
-                var mainValue = "";
-                var foundValue = false;
-                for (var j = values.length; j > 0; j--) {
-                    var digitControl = $('#' + questionInputId + questionSecondDelimiter + j)
-                    var digitValue = $(digitControl).val();
-                    if (j == digit) {
-                        if (digitValue != '') {
-                            digitValue = (digitValue * 1) + (up ? 1 : -1);
-                        } else {
-                            digitValue = '0';
-                        }
-                    }
-                    if (digitValue != '') {
-                        foundValue = true;
-                    }
-                    if (foundValue && digitValue == '') {
-                        $(digitControl).val('0').trigger('keyup.yprime');
-                        digitValue = '0';
-                    }
-                    mainValue += digitValue;
-                }
-                mainValue = mainValue == '' ? 0 : mainValue * 1;
-                return mainValue;
-            }
-
-            function updateHiddenControl(mainValue) {
-                var obj = $('#' + questionInputId);
-
-                $(obj).val(mainValue);
-                $(obj).trigger('keyup.yprime');
-            }
-
-            //wire up the events
-            $(btnUp).bind('tap', function () {
-                numberButtonClickHandler(this, true);
-            });
-
-            $(btnDown).bind('tap', function () {
-                numberButtonClickHandler(this, false);
             });
 
             innerWrapper.appendChild(btnUp);
@@ -392,31 +303,9 @@ function Question(obj, onSuccess, onError) {
             return innerWrapper;
         }
 
-        //this is float: right, so the controls are added in reverse
-        if (typeof this.InputDisplayText != 'undefined' && this.InputDisplayText != null && this.InputDisplayText != '') {
-            //add a translation to the control
-            var inputDisplay = uiController.createControl('div', { "class": "number-picker-description" });
-            inputDisplay.innerHTML = translationController.get(this.InputDisplayText);
-            inputWrapper.appendChild(inputDisplay);
-        }
-
-        var maxValueString = reverse((this.MaxValue + ''));
-        var len = maxValueString.length;
-        for (var i = 0; i < len; i++) {
-            var minValue = 0;
-            var maxValue = 9;
-            if (i == (len - 1)) {
-                maxValue = maxValueString[i];
-            }
-            inputWrapper.appendChild(createDigitControl(questionControlInputId, i + 1, this.MinValue, this.MaxValue));
-        }
-
-        //clear the float left
-        inputWrapper.appendChild(uiController.createControl('div', { "class": "clear" }));
-        inputWrapper.appendChild(hiddenInput);
+        inputWrapper.appendChild(createDigitControl(this));
 
         this.appendHtmlInput(obj, inputWrapper);
-
 
         //attach events
         screenController.initControlValue(obj, 'QuestionResponse');
@@ -470,13 +359,6 @@ function Question(obj, onSuccess, onError) {
     this.renderPlainRadioButtonControl = function () {
         var obj = this.renderRadioButtonControl();
         $(obj).addClass('plain-radio');
-        screenController.initControlValue(obj, 'QuestionResponse');
-        return obj;
-    };
-
-    this.renderRadioButtonCheckboxControl = function () {
-        var obj = this.renderRadioButtonControl();
-        $(obj).addClass('radio-checkbox');
         screenController.initControlValue(obj, 'QuestionResponse');
         return obj;
     };
@@ -540,7 +422,7 @@ function Question(obj, onSuccess, onError) {
 
         var leftDiv = uiController.createControl('div', { "class": "left NRS-label" });
         var leftLabel = uiController.createControl('label', {});
-        var leftImg = uiController.createControl('img', { src: "./images/triangle.png" });
+        var leftImg = uiController.createControl('img', { src: "res/img/triangle.png" });
 
         $(leftLabel).html(translationController.get(this.MinValueText));
         $(leftDiv).append(leftImg);
@@ -548,7 +430,7 @@ function Question(obj, onSuccess, onError) {
 
         var rightDiv = uiController.createControl('div', { "class": "right NRS-label" });
         var rightLabel = uiController.createControl('label', {});
-        var rightImg = uiController.createControl('img', { src: "./images/triangle.png" });
+        var rightImg = uiController.createControl('img', { src: "res/img/triangle.png" });
 
         $(rightLabel).html(translationController.get(this.MaxValueText));
         $(rightDiv).append(rightImg);
@@ -607,11 +489,8 @@ function Question(obj, onSuccess, onError) {
     };
 
     this.renderCustomScreen = function () {
-        var questionId = this.Id;
         var id = this.controlDivId();
-        var inputId = this.controlInputId();
         var textid = this.Text;
-        var isLandscapeOrientation = this.IsLandscapeOrientation;
         var obj = uiController.createControl('div', {
             'id': this.controlDivId(),
             'class': 'custom-question-screen'
@@ -620,225 +499,14 @@ function Question(obj, onSuccess, onError) {
         function fnInit(obj) {
             $(obj).removeAttr(customQuestionCreateAttribute);
             var fn = function () {
-                //this control will ultimately hold the question value
-                //it can be get and set from CustomScreenController.js
-                //jo 25Jan2016
-                var pars = { type: 'hidden', "class": customQuestionInputAttribute };
-                pars[questionIdAttribute] = questionId;
-                var input = uiController.createInputControl(inputId, pars);
-                screenController.initInputDefaults(input, 'QuestionResponse');
-                obj.appendChild(input);
+                screenController.initControlValue($('#' + id), 'QuestionResponse');
             };
-            screenController.changeScreen(textid, null, null, obj, fn, {}, isLandscapeOrientation);
-        };
-
-        this.bindInitEvent(obj, fnInit);
-
-        return obj;
-    };
-    this.renderEQ5D5L7Screen = function () {
-        var questionId = this.Id;
-        var id = this.controlDivId();
-        var inputId = this.controlInputId();
-        var textid = this.Text;
-        var isLandscapeOrientation = this.IsLandscapeOrientation;
-        var obj = uiController.createControl('div', {
-            'id': this.controlDivId(),
-            'class': 'custom-question-screen'
-        });
-
-        function fnInit(obj) {
-            $(obj).removeAttr(customQuestionCreateAttribute);
-            var fn = function () {
-                //this control will ultimately hold the question value
-                //it can be get and set from CustomScreenController.js
-                //jo 25Jan2016
-                var pars = { type: 'hidden', "class": customQuestionInputAttribute };
-                pars[questionIdAttribute] = questionId;
-                var input = uiController.createInputControl(inputId, pars);
-                screenController.initInputDefaults(input, 'QuestionResponse');
-                obj.appendChild(input);
-            };
-            screenController.changeScreen('EQ-5D-5L7', null, null, obj, fn, {}, isLandscapeOrientation);
-        };
-
-        this.bindInitEvent(obj, fnInit);
-
-        return obj;
-    };
-    this.renderCheckBox = function () {
-        var obj = uiController.createControl('div', {});
-        var checkboxId = this.controlInputId();
-        var checkPars = { type: "checkbox", id: checkboxId, name: checkboxId };
-        checkPars[questionIdAttribute] = this.Id;
-        checkPars[controlTypeAttribute] = 'checkbox-single';
-        var check = uiController.createControl('input', checkPars);
-        var label = uiController.createControl('label', { "for": checkboxId })
-        $(label).html(translationController.get(this.Text));
-        obj.appendChild(check);
-        obj.appendChild(label);
-
-        //attach events
-        screenController.initInputDefaults(obj, 'QuestionResponse');
-
-        function init(obj) {
-            //make sure there is an answer for false AND for true
-            $(obj).find('input[type="checkbox"]').each(function () {
-                $(this).trigger("change.yprime");
-                //screenController.inputChangeHandler(this);
-            });
-
-        }
-
-        this.bindInitEvent(obj, init);
-
-        return obj;
-    };
-
-    this.renderCheckBoxList = function () {
-        var obj = this.renderControlBaseObject();
-        var opts = this.Options;
-        var pars = {
-            id: this.controlInputId(),
-            "data-role": "controlgroup", //render native from jqm
-            "class": "select-control"
-        };
-        pars[questionIdAttribute] = this.Id;
-        var checkboxGroup = uiController.createControl('fieldset', pars);
-
-        for (var i = 0; i < opts.length; i++) {
-            var checkboxId = this.controlInputId() + '_' + opts[i].Value;
-            var checkPars = { type: "checkbox", checkValue: opts[i].Value, id: checkboxId, name: this.controlInputId() };
-            checkPars[questionIdAttribute] = this.Id;
-            checkPars[controlTypeAttribute] = 'checkbox-list';
-            var check = uiController.createControl('input', checkPars);
-            var label = uiController.createControl('label', { "for": checkboxId })
-            $(label).html(translationController.get(opts[i].Text));
-            checkboxGroup.appendChild(check);
-            checkboxGroup.appendChild(label);
-        }
-        //load defaults
-        //add the element
-        this.appendHtmlInput(obj, checkboxGroup);
-
-        //attach events
-        screenController.initInputDefaults(obj, 'QuestionResponse');
-
-        return obj;
-        /*
-         <fieldset data-role="controlgroup">
-        <input type="checkbox" name="checkbox-v-2a" id="checkbox-v-2a">
-        <label for="checkbox-v-2a">One</label>
-        <input type="checkbox" name="checkbox-v-2b" id="checkbox-v-2b">
-        <label for="checkbox-v-2b">Two</label>
-        <input type="checkbox" name="checkbox-v-2c" id="checkbox-v-2c">
-        <label for="checkbox-v-2c">Three</label>
-    </fieldset>
-        */
-    };
-
-    this.renderTimeControl = function () {
-        var obj = this.renderControlBaseObject();
-        var opts = this.Options;
-        var pars = {
-            id: this.controlInputId(),
-            "data-role": "none", //render native from jqm
-            "class": "time-control"
-        };
-        pars[questionIdAttribute] = this.Id;
-
-
-        var tbl = uiController.createTableControl(3, 4);
-        $(tbl).addClass("TimeControl full-width");
-
-        var Btn = uiController.createControl("button", { "onclick": "Increment('TimeControl1', '" + this.controlInputId() + "')" });
-
-        var UpImg = uiController.createControl("img", { "src": "../../res/css//images/icons-png/plus-black.png" });
-        Btn.appendChild(UpImg);
-
-        var Cell = $(tbl).find("td[rowIndex=0][colIndex=0]")[0];
-        Cell.appendChild(Btn);
-
-        Btn = uiController.createControl("button", { "onclick": "Increment('TimeControl3', '" + this.controlInputId() + "')" });
-        UpImg = uiController.createControl("img", { "src": "../../res/css//images/icons-png/plus-black.png" });
-        Btn.appendChild(UpImg);
-
-        Cell = $(tbl).find("td[rowIndex=0][colIndex=2]")[0];
-        Cell.appendChild(Btn);
-
-        Btn = uiController.createControl("button", { "class": "selected" });
-        var Span = uiController.createControl("span");
-        $(Span).text("AM");
-        Btn.appendChild(Span);
-
-        Cell = $(tbl).find("td[rowIndex=0][colIndex=3]")[0];
-        Cell.appendChild(Btn);
-        Btn = uiController.createControl("button");
-        var Span = uiController.createControl("span");
-        $(Span).text("PM");
-        Btn.appendChild(Span);
-
-        Cell.appendChild(Btn);
-        $(Cell).attr("rowspan", "3");
-
-        Cell = $(tbl).find("td[rowIndex=1][colIndex=0]")[0];
-        var Div = uiController.createControl("div", { "id": "TimeControl1", "min-value": "1", "max-value": "12", "left-padding": "1", "rollover": "true" });
-        $(Div).text("9");
-        Cell.appendChild(Div);
-
-        Cell = $(tbl).find("td[rowIndex=1][colIndex=1]")[0];
-        var Div = uiController.createControl("div", { "id": "TimeControl1", "min-value": "1", "max-value": "12", "left-padding": "1", "rollover": "true" });
-        $(Div).text(":");
-        Cell.appendChild(Div);
-
-        Cell = $(tbl).find("td[rowIndex=1][colIndex=2]")[0];
-        Div = uiController.createControl("div", { "id": "TimeControl3", "min-value": "1", "max-value": "59", "left-padding": "2", "rollover": "true" });
-        $(Div).text("00");
-        Cell.appendChild(Div);
-
-        Btn = uiController.createControl("button", { "onclick": "Decrement('TimeControl1', '" + this.controlInputId() + "')" });
-        var DownImg = uiController.createControl("img", { "src": "../../res/css//images/icons-png/minus-black.png" });
-        Btn.appendChild(DownImg);
-        Cell = $(tbl).find("td[rowIndex=2][colIndex=0]")[0];
-        Cell.appendChild(Btn);
-
-        Btn = uiController.createControl("button", { "onclick": "Decrement('TimeControl3', '" + this.controlInputId() + "')" });
-        DownImg = uiController.createControl("img", { "src": "../../res/css//images/icons-png/minus-black.png" });
-        Btn.appendChild(DownImg);
-        Cell = $(tbl).find("td[rowIndex=2][colIndex=2]")[0];
-        Cell.appendChild(Btn);
-
-        obj.appendChild(tbl);
-        // Add a hidden input field to contain the actual answer.
-        var pars = {
-            id: this.controlInputId(),
-            "data-role": "none", //render native from jqm
-            "class": "select-control",
-            "style": "visibility:hidden;"
-        };
-        pars[questionIdAttribute] = this.Id;
-
-        var id = this.controlInputId();
-        var Input = uiController.createInputControl(id, pars);
-
-        //var Input = uiController.createControl("input", { "id": "DoseTime", "type": "text" });
-        function fnInit(obj) {
-            //debugger;
-            function ReloadSelectedTime() {
-                //stubbed out
-            }
-
-            screenController.initControlValue($('#' + id), 'QuestionResponse');
-            ReloadSelectedTime(id);
             //changeScreen: function (screenName, title, backgroundCSS, contentDivOverloadObject, onSuccess, pars)
-            //screenController.changeScreen(textid, null, null, obj, fn);
+            screenController.changeScreen(textid, null, null, obj, fn);
         };
 
-        this.bindInitEvent(Input, fnInit);
+        this.bindInitEvent(obj, fnInit);
 
-        obj.appendChild(Input);
-
-        screenController.initControlValue(obj, 'QuestionResponse');
 
         return obj;
     };

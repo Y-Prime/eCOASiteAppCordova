@@ -21,7 +21,7 @@ var screenController = (function () {
         initialize: function () {
         },
         getDataTransferSuccessCallback: function (fn) {
-            if (typeof dataTransferSuccessCallback == 'undefined') {
+            if(typeof dataTransferSuccessCallback == 'undefined'){
                 dataTransferSuccessCallback = null;
             }
             return dataTransferSuccessCallback;
@@ -70,7 +70,7 @@ var screenController = (function () {
         changeScreen: function (screenName, title, backgroundCSS, contentDivOverloadObject, onSuccess, pars, isLandscapeOrientation) {
             //default orientation to portrait
             isLandscapeOrientation = (typeof isLandscapeOrientation == 'undefined') ? false : isLandscapeOrientation;
-          
+
             function fnChange() {
                 var url = screenController.getScreenUrl(screenName, pars);
                 var contentDivOverloaded = false;
@@ -98,8 +98,8 @@ var screenController = (function () {
                 $(contentDiv).html('<img class="loading" src="./images/spinner.gif"/>Loading...');
                 $(contentDiv).load(
                     url,
-                    null, function () {
-                        // $(contentDiv).html(a);
+                    null,
+                    function () {
                         //set the orientation of the screen
                         screenController.setOrientation(isLandscapeOrientation);
                         //$(contentDiv)
@@ -109,11 +109,8 @@ var screenController = (function () {
                         if (!contentDivOverloaded) {
                             screenController.headerHandler(title);
                         }
-
                         screenController.contentHandler(contentDiv);
                         screenController.initInputDefaults(contentDiv, screenName);
-
-
                         //if the content is a control (numpad) don't reset the footer
                         if (!contentDivOverloaded) {
                             screenController.footerHandler(contentDiv);
@@ -125,9 +122,6 @@ var screenController = (function () {
                         screenController.setCurrentScreen(screenName);
                     }
                 ).hide().fadeIn('fast').find('input').first().focus();
-            };
-            function callback_function(contentDivOverloaded,contentDiv) {
-              
             };
             if (typeof contentDivOverloadObject == "object" && contentDivOverloadObject != null) {
                 fnChange();
@@ -143,15 +137,8 @@ var screenController = (function () {
                 }
             };
 
-            fnShow();
-            return;
-
             var skipList = [
-                'UserLogin',
                 'Login',
-                'SiteMain',
-                'PatientVisits',
-                'VisitQuestionnaires',
                 'EnterOldPIN',
                 'EnterNewPIN',
                 'ConfirmNewPIN',
@@ -166,7 +153,7 @@ var screenController = (function () {
                 'ForgotPIN',
                 'QuestionResponse',
                 'ElectronicSignature',
-                'DSST_Score'
+                'ChangePINSuccess'
             ];
 
             if (arrayContains(skipList, screenName)) {
@@ -193,10 +180,6 @@ var screenController = (function () {
         headerHandler: function (title) {
             if (title != null) {
                 $('header').html(title.length > 0 ? translationController.get(title, translationController.defaultLanguageId()) : '');
-                if ($('#questionnairename_header').length)
-                {
-                    $('#questionnairename_header').html(title);
-                }
             }
         },
         clearHeader: function (title) {
@@ -206,9 +189,11 @@ var screenController = (function () {
         },
         contentHandler: function (contentDiv) {
             //navigation button control
+            var event = 'click.yprime';
             $(contentDiv).find('.nav-button').each(function () {
+                //(this).unbind(event);
                 $(this).bind(
-                    'click',
+                    event,
                     function () {
                         screenController.buttonHandler(this);
                     }
@@ -293,8 +278,8 @@ var screenController = (function () {
                             }
                             //call this to make sure the cached answers are updated
                             $('#' + inputID).trigger('keyup.yprime');
-                            //clean up the responsiveness of the keys - jo 01Feb2016
                             var obj = this;
+                            //assembla #?? - fix responsiveness on keypad - jo 01Feb2016
                             setTimeout(function () { $(obj).attr(inClickEventAttribute, false); }, 100);
                         }
                     };
@@ -304,7 +289,7 @@ var screenController = (function () {
 
                     if ($(this).attr('data-value') == 'clear' && typeof clickEvent != 'undefined') {
                         //display an ok button
-                        $(this).html('<i class="ui-icon-fa ui-icon-fa-check"></i>');//.addClass('ui-icon-fa ui-icon-fa-check');
+                        $(this).html('').addClass('fa fa-check fa-2x');
                     }
                 });
 
@@ -322,33 +307,12 @@ var screenController = (function () {
             var id = $(obj)[0].id;
             var name = $(obj)[0].name;
             var isQuestion = $(obj).attr(questionIdAttribute) != undefined;
-            var controlType = $(obj).attr(controlTypeAttribute);
 
             var defaultValue = answers[(!isQuestion ? screenName + '.' : '') + id];
 
-            switch (type) {
-                case 'radio':
-                    defaultValue = answers[(!isQuestion ? screenName + '.' : '') + name];
-                    break;
-                case 'checkbox':
-                    if (controlType == 'checkbox-single') {
-                        defaultValue = typeof defaultValue == 'undefined' ? false : defaultValue;
-                    }
-                    if (controlType == 'checkbox-list') {
-                        var answersArray = answers[(!isQuestion ? screenName + '.' : '') + name];
-                        if (typeof answersArray == 'undefined') {
-                            answersArray = [];
-                        }
-                        var val = $(obj).attr('checkValue');
-                        defaultValue = arrayContains(answersArray, val);
-                    }
-
-                    break;
+            if (type == 'radio') {
+                defaultValue = answers[(!isQuestion ? screenName + '.' : '') + name];
             }
-
-            //if (type == 'radio') {
-            //    defaultValue = answers[(!isQuestion ? screenName + '.' : '') + name];
-            //}
 
             //TODO: this may need to be updated to handle multiple answers
 
@@ -365,7 +329,7 @@ var screenController = (function () {
             } else {
                 answers[(!isQuestion ? screenName + '.' : '') + id] = value;
             }
-
+            
             return true;
         },
 
@@ -374,7 +338,6 @@ var screenController = (function () {
             var id = $(obj)[0].id;
             var name = $(obj)[0].name;
             var defaultValue = this.getSavedControlValue(obj, screenName);
-            var controlType = $(obj).attr(controlTypeAttribute);
 
             if (type != "button") {
                 //set the default value
@@ -382,22 +345,6 @@ var screenController = (function () {
                     switch (type) {
                         case "radio":
                             $('input:radio[name="' + name + '"][value=' + defaultValue + ']').click();
-                            break;
-                        case "checkbox":
-                            if (controlType == 'checkbox-single') {
-                                //obj.checked = defaultValue;
-                                //if (defaultValue) {
-                                $(obj).prop('checked', defaultValue == 'true' || defaultValue == true);
-                                //                 }
-                            }
-                            if (controlType == 'checkbox-list') {
-                                //the default value returns a boolean
-                                if (defaultValue) {
-                                    $(obj).prop('checked', true);
-                                }
-                            }
-
-                            //add additional checkbox types here...
                             break;
                         default:
                             $(obj).val(defaultValue);
@@ -439,48 +386,18 @@ var screenController = (function () {
             var name = $(this)[0].name;
             var type = $(this)[0].type;
             var isQuestion = $(this).attr(questionIdAttribute) != undefined;
-            var controlType = $(this).attr(controlTypeAttribute);
             var lookup = '';
 
             switch (type) {
                 case "radio":
                     lookup = (!isQuestion ? screen + '.' : '') + name;
-                    answers[lookup] = [$(this).val()];
-                    break;
-                case "checkbox":
-                    if (controlType == 'checkbox-single') {
-                        lookup = (!isQuestion ? screen + '.' : '') + id;
-                        answers[lookup] = [this.checked];
-                    }
-                    if (controlType == 'checkbox-list') {
-                        lookup = (!isQuestion ? screen + '.' : '') + name;
-                        if (typeof answers[lookup] == 'undefined') {
-                            answers[lookup] = [];
-                        }
-                        //determine if checked and remove / push
-                        if (this.checked) {
-                            answers[lookup].push($(this).attr('checkValue'));
-                        } else {
-                            //remove the item from the array
-                            var arr = [];
-                            var loopArr = answers[lookup];
-                            var val = $(this).attr('checkValue');
-                            for (var i = 0; i < loopArr.length; i++) {
-                                if (loopArr[i] != val) {
-                                    arr.push(val);
-                                }
-                            }
-                            answers[lookup] = arr;
-                        }
-                    }
                     break;
                 default:
                     lookup = (!isQuestion ? screen + '.' : '') + id;
-                    answers[lookup] = [$(this).val()];
                     break;
             }
 
-
+            answers[lookup] = $(this).val();
             //TODO: this may need to be updated to handle multiple answers
 
             //console.log('Change handler:' + screen + "." + id + ' = ' + answers[screen + "." + id]);
@@ -530,7 +447,17 @@ var screenController = (function () {
             //'QuestionResponse',
             'TrainingComplete',
             'PatientLogin',
-            'PatientEnrolledSuccess'],
+            'PatientEnrolledSuccess',
+            'EnrollmentSuccess',
+            'EnterNewPIN',
+            'EnterOldPIN',
+            'ConfirmNewPIN',
+            'SelectReminderTime',
+            'SelectReminderType',
+            'UpdateReminderSuccess',
+            'EnterEmailAddress',
+            'EnterPhoneNumber'
+            ],
         addScreenViewed: function (screenName, title) {
             //NOTE: add all custom questionnaire screens here!!
 

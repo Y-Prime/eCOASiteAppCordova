@@ -1,17 +1,26 @@
-﻿<div id="logo" class="h-center">
-    <img src="res/img/user_login_logo.png" />
+﻿<div id="logo" class="center">
+    <img src="./images/user_login_logo.png" class="yprime-logo" />
 </div>
-<h2 translation="keyLogin">Login</h2>
 <form>
-    <input id="subjectID" name="subjectID" class="full-width" type="number" placeholder="Subject ID" maxlength="8" translation="keySubjectID" value="" />
-    <input id="subjectPin" name="subjectPin" class="full-width" type="password" placeholder="PIN" maxlength="20" translation="keyPIN" value="" onfocus="changeInputHandler(false)" onblur="changeInputHandler(true);"/>
-   <!-- $('#subjectLogin').click()-->
-     <input id="subjectLogin" name="subjectLogin" class="" type="button" value="Login" translation="keyLogin" />
-    <div class="h-center margin-top-standard">
+    <div class="center">
+        <i class="ui-btn ui-icon-fa ui-icon-fa-user subject-user"></i>
+    </div>
+    <div class="center">
+        <input id="subjectID" name="subjectID" class="full-width" type="number" placeholder="Subject ID" maxlength="8" translation="keySubjectID" value="" />
+        <hr class="darkgray auth-hr">
+        <input id="subjectPin" name="subjectPin" class="full-width" type="password" placeholder="PIN" maxlength="20" translation="keyPIN" value="" onfocus="changeInputHandler(false)" onblur="changeInputHandler(true);" />
+        <hr class="darkgray auth-hr">
+    </div>
+    <!-- $('#subjectLogin').click()-->
+    <a id="subjectLogin" name="subjectLogin" href="#" class="ui-btn btn-login" translation="keyLogin" >
+        Log in
+        <i class="ui-icon-fa ui-icon-fa-sign-in pad-right"></i>   
+     </a>
+    <div class="h-center">
         <a id="forgotPin" name="forgotPin" class="nav-button full-width" href="#" next-screen="ForgotPIN" next-screen-title="keyForgotPIN" translation="keyForgotPIN">Forgot PIN</a>
     </div>
     <!--<input id="addPatient" type="button" onclick="addPatientClick()" value="Add Patient" />-->
-    <div class="sub-footer">
+    <!--<div class="sub-footer">
         <table class="full-width">
             <tr>
                 <td class="third-width" align="right">
@@ -32,8 +41,14 @@
 
 
     </div>
-    <div class="clear"></div>
+    <div class="clear"></div>-->
 </form>
+<footer data-role="footer" data-position="fixed" class="background-blue login-footer">
+    <p class="white left icon80"> <i class="ui-icon-fa ui-icon-fa-cog"></i> </p>
+
+    <p class="white right icon80"> <i class="ui-icon-fa ui-icon-fa-question"></i> </p>
+
+</footer>
 
 <script type="text/javascript">
     $(function () {

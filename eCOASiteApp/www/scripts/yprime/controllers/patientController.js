@@ -17,26 +17,34 @@ var patientController = (function () {
             currentPatientObject = obj;
         },
         login: function (patientId, pin, onSuccess, onFail, onError) {
-            function fnLoggedIn(onLoginSuccess, onLoginError) {
-                patientController.resetLoginAttempts(patientId, onLoginSuccess, onLoginError);
+            function doLogin() {
+                function fnLoggedIn(onLoginSuccess, onLoginError) {
+                    patientController.resetLoginAttempts(patientId, onLoginSuccess, onLoginError);
+                }
+
+                patientController.setCurrentLoggingInPatientNumber(patientId);
+                if (patientId.length > 0 && pin.length > 0) {
+                    if (serviceController.connected()) {
+                        patientController.loginAPI(patientId, pin, function () { fnLoggedIn(onSuccess, onError); }, onFail, onError);
+                    } else {
+                        patientController.loginDB(patientId, pin, function () { fnLoggedIn(onSuccess, onError); }, onFail, onError);
+                    }
+                } else {
+                    if (typeof onFail == 'function') {
+                        onFail();
+                    }
+                    //make sure that the code calling handles a failed login - jo 01Feb2016
+                    patientController.failedLoginHandler();
+                }
             }
 
-            patientController.setCurrentLoggingInPatientNumber(patientId);
-            if (patientId.length > 0 && pin.length > 0) {
-                if (serviceController.connected()) {
-                    this.loginAPI(patientId, pin, function () { fnLoggedIn(onSuccess, onError); }, onFail, onError);
-                } else {
-                    this.loginDB(patientId, pin, function () { fnLoggedIn(onSuccess, onError); }, onFail, onError);
-                }
-            } else {
-                if (typeof onFail == 'function') {
-                    onFail();
-                }
-                this.failedLoginHandler(xhr, status, error);
-            }
+            doLogin();
+            //make sure the logged in value is initialized
+            //patientController.resetLoginAttempts(patientId, doLogin);
         },
         loginAPI: function (patientId, pin, onSuccess, onFail, onError) {
             function onAPISuccess(e) {
+
                 function checkForVersionUpdate(onVersionSuccess, onVersionError) {
                     var deviceId = app.getDeviceId();
                     var patientNumber = patientController.getCurrentPatient().PatientNumber;
@@ -44,37 +52,27 @@ var patientController = (function () {
                 }
 
                 function loginSuccess(onSuccess, onError) {
-                    function tempPinSuccess(onSuccess, onError) {
-                        patientController.checkForTemporaryPin(onSuccess);
-                    }
-
-                    checkForVersionUpdate(function () { tempPinSuccess(onSuccess, onError); }, onError);
+                    checkForVersionUpdate(onSuccess, onError);
                 }
 
                 //check the pin against the sent pin
                 //login in the user
                 //check against the db
-                patientController.setCurrentPatient(new Patient({
+                currentPatientObject = new Patient({
                     Id: e.Id,
                     EnrolledId: e.EnrolledId,
                     PatientNumber: e.EnrolledId, //TODO: this may not be correct!!!
-                    PatientGender: e.PatientGender, //Assembla #217, 243 - losing the patient gender on login in db - jo 02Feb2016
                     Pin: e.Pin,
                     IsTempPin: e.IsTempPin,
                     PatientStatusTypeId: e.PatientStatusTypeId,
                     SecurityAnswer: e.SecurityAnswer,
                     LoginAttempts: e.LoginAttempts,
                     EnrolledDate: e.EnrolledDate,
-                    IsTrainingComplete: e.IsTrainingComplete//,
-                    //these are not returned from the service right now.
-                    /*PhoneNumber: e.PhoneNumber, 
-                    SiteId, 
-                    NextVisit, 
-                    BLDate*/
-                }));
+                    IsTrainingComplete: e.IsTrainingComplete
+                });
                 currentSubjectNumber = patientId;
 
-                patientController.getCurrentPatient().insertUpdate(null, function () { loginSuccess(onSuccess, onError); }, onError);
+                currentPatientObject.insertUpdate(null, function () { loginSuccess(onSuccess, onError); }, onError);
             };
             function onAPIFail(e) {
                 patientController.failedLoginHandler();
@@ -93,15 +91,11 @@ var patientController = (function () {
             function callback(tx, results) {
                 if ((results.length > 0 && (results[0]['Pin'] + '') == patientController.encryptMD5(pin)) || (results.length == 1 && results[0]['Pin'] == '1234')) {
                     //add the object
-                    patientController.setCurrentPatient(new Patient(results[0]));
+                    currentPatientObject = new Patient(results[0]);
                     currentSubjectNumber = patientId;
-                    //make sure to set the base 64 token for patient
-
-                    serviceController.setAuthHeader(patientId, pin, false);
-                    patientController.checkForTemporaryPin(onSuccess);
-                    //if (typeof onSuccess == 'function') {
-                    //    onSuccess();
-                    //}
+                    if (typeof onSuccess == 'function') {
+                        onSuccess();
+                    }
                 } else {
                     if (typeof onFail == 'function') {
                         //update the login attempts
@@ -115,37 +109,10 @@ var patientController = (function () {
 
         },
         logout: function (onSuccess) {
-            patientController.setCurrentPatient({});
+            currentPatientObject = {};
             if (typeof onSuccess == 'function') {
                 onSuccess();
             }
-        },
-        getCurrentLoginCallback: function () {
-            if (typeof currentLoginCallback == 'undefined') {
-                currentLoginCallback = null;
-            }
-            return currentLoginCallback;
-        },
-        setCurrentLoginCallback: function (callback) {
-            currentLoginCallback = callback;
-        },
-        getCurrentChangePinCallback: function () {
-            if (typeof currentChangePinCallback == 'undefined') {
-                currentChangePinCallback = null;
-            }
-            return currentChangePinCallback;
-        },
-        setCurrentChangePinCallback: function (callback) {
-            currentChangePinCallback = callback;
-        },
-        getCurrentEnrollmentCallback: function () {
-            if (typeof currentEnrollmentCallback == 'undefined') {
-                currentEnrollmentCallback = null;
-            }
-            return currentEnrollmentCallback;
-        },
-        setCurrentEnrollmentCallback: function (callback) {
-            currentEnrollmentCallback = callback;
         },
         validPin: function (val) {
             return val.length >= 4;
@@ -154,6 +121,9 @@ var patientController = (function () {
             //note this returns a message, if blank then valid
             //TODO: add extra logic
             var message = '';
+            //if (oldPIN != this.PIN) {
+            //    message += 'Invalid Old PIN.';
+            //}
 
             if (newPIN != confirmPIN) {
                 message += (message.length > 0 ? '<br/>' : '') + translationController.get('keyNewPINDoesNotMatchConfirmPIN');
@@ -162,62 +132,18 @@ var patientController = (function () {
             return message;
         },
         getCurrentPatientIsTempPin: function () {
-            var result = false;
-            if (typeof patientController.getCurrentPatient() != 'undefined') {
-                result = patientController.getCurrentPatient().IsTempPin == true || patientController.getCurrentPatient().IsTempPin == 'true';
-            }
-            return result;
+            return currentPatientObject.IsTempPin == true || currentPatientObject.IsTempPin == 'true';
         },
         checkForTemporaryPin: function (onSuccess, onError) {
             if (patientController.getCurrentPatientIsTempPin()) {
-                //add a check for enrollment here
-                function changePinSuccess() {
-                    patientController.checkForEnrollment(onSuccess, onError);
-                }
                 //reset the pin
-                patientController.setCurrentChangePinCallback(changePinSuccess);
                 screenController.changeScreen('EnterNewPIN', '');
             } else {
-                patientController.checkForEnrollment(onSuccess, onError);
-                //if (typeof onSuccess == 'function') {
-                //    onSuccess();
-                //}
-                //patientController.checkForReminderSetup(onSuccess, onError);
-            }
-        },
-        getExitChangePinScreen: function () {
-            return app.getSiteBasedMode() ? 'VisitQuestionnaires' : 'Tools' ;
-        },
-        getExitChangePinScreenTitle: function () {
-            return app.getSiteBasedMode() ? '' : 'keyToolsMenu';
-        },
-        checkForEnrollment: function (onSuccess, onError) {
-            function onTrue() {
                 if (typeof onSuccess == 'function') {
                     onSuccess();
                 }
+                //patientController.checkForReminderSetup(onSuccess, onError);
             }
-            function onFalse() {
-                patientController.setCurrentEnrollmentCallback(onSuccess);
-            }
-
-            if (patientController.getCurrentPatient().isEnrolled()) {
-                onTrue();
-            } else {
-                onFalse();
-                //go to the page
-                screenController.changeScreen('PatientEnrollSecurityQuestion', '');
-            }
-
-        },
-        validSecurityAnswerValue: function (securityQuestionId, answerValue) {
-            var message = '';
-            answerValue = answerValue + '';
-            //TODO: this number should be configurable! + more logic per security question
-            if (answerValue.length != 4) {
-                message += (message.length > 0 ? '<br/>' : '') + translationController.get('keyInvalidLast4Digits');
-            }
-            return message;
         },
         checkForReminderSetup: function (onSuccess, onError) {
             var fn = function (cnt) {
@@ -233,15 +159,15 @@ var patientController = (function () {
                 }
             };
 
-            reminderController.getReminderCount(patientController.getCurrentPatient().PatientNumber, fn, null);
+            reminderController.getReminderCount(currentPatientObject.PatientNumber, fn, null);
         },
         checkForTrainingCompleted: function (onSuccess, onError) {
-            if (!patientController.getCurrentPatient().IsTrainingComplete) {
-                function completeTrainingQuestionnaire(callback) {
+            if (!currentPatientObject.IsTrainingComplete) {
+                function completeTrainingQuestionnaire() {
                     //check for training
-                    patientController.getCurrentPatient().completeTraining(callback);
+                    currentPatientObject.completeTraining(onSuccess);
                 }
-
+                //screenController.addScreenViewed('Main', 'keySubjectMainMenu');
                 questionController.startQuestionnaire('Training', null, false, completeTrainingQuestionnaire);
             } else {
                 if (typeof onSuccess == 'function') {
@@ -268,6 +194,8 @@ var patientController = (function () {
                         screenController.changeScreen('Main', 'keySubjectMainMenu');
                         break;
                 }
+
+
             }
 
             pgConfirm(message, confirmPractice, title, [translationController.get('keyyes'), translationController.get('keyno')]);
@@ -286,8 +214,13 @@ var patientController = (function () {
             var patientNumber = patientController.getCurrentLoggingInPatientNumber();
 
             function displayFailedLoginMessage(attempts) {
-                app.alert(translationController.get(attempts <= patientController.maximumLoginAttempts ? 'keyInvalidLogin' : 'keyInvalidLoginMax'));
-            }
+                if (!serviceController.connected() && attempts == -1) {
+                    app.alert(translationController.get('keyNotConnected'));
+
+                } else {
+                    app.alert(translationController.get(attempts <= patientController.maximumLoginAttempts ? 'keyInvalidLogin' : 'keyInvalidLoginMax'));
+                }
+             }
 
             //get the number of attempts
             if (patientNumber != null) {
@@ -296,6 +229,7 @@ var patientController = (function () {
                 }
 
                 patientController.incrementLoginAttempts(patientNumber, getPatientAttempts);
+                //dbController.executeSql(sql, pars, getPatientAttempts);
             } else {
                 displayFailedLoginMessage(0);
             }
@@ -308,7 +242,7 @@ var patientController = (function () {
             function onGotAttempts(tx, rows) {
                 var LoginAttempts = 0;
                 if (rows.length > 0) {
-                    LoginAttempts = rows.length > 0 ? rows[0]['LoginAttempts'] * 1 : 0;
+                    LoginAttempts = rows.length > 0 ? rows[0]['LoginAttempts'] * 1 : -1;
                 } else {
                     LoginAttempts = patientController.getLocalLoginAttempts(patientNumber);
                 }
@@ -319,21 +253,25 @@ var patientController = (function () {
             //Assembla #264 - error when entering incorrect pin completing diary
             dbController.executeSql(sql, pars, onGotAttempts, onError);
         },
-        getLocalLoginAttempts: function (patientNumber) {
-            if (typeof localLoginAttempts[patientNumber] == 'undefined') {
-                localLoginAttempts[patientNumber] = 0;
-            }
+        //this is necessary for the first time a user logs in to retain the number of attempts
+        getLocalLoginAttempts: function (patientNumber) {         
+                localLoginAttempts[patientNumber] = -1;           
             return localLoginAttempts[patientNumber];
         },
         setLocalLoginAttempts: function (patientNumber, val) {
             localLoginAttempts[patientNumber] = val;
         },
         incrementLoginAttempts: function (patientNumber, onSuccess, onError) {
-            var sql = 'update Patient set LoginAttempts = LoginAttempts + 1 where PatientNumber=?';
-            var pars = [patientNumber];
+            function setLoginAttempts(loginAttempts) {
+                var sql = "update Patient set LoginAttempts = ? where PatientNumber=?";
+                //var sql = 'update Patient set LoginAttempts = LoginAttempts + 1 where PatientNumber=?';
+                var pars = [loginAttempts + 1, patientNumber];
 
-            patientController.setLocalLoginAttempts(patientNumber, patientController.getLocalLoginAttempts(patientNumber) + 1);
-            dbController.executeSql(sql, pars, onSuccess, onError);
+                patientController.setLocalLoginAttempts(patientNumber, patientController.getLocalLoginAttempts(patientNumber) + 1);
+                dbController.executeSql(sql, pars, onSuccess, onError);
+            }
+
+            patientController.getLoginAttempts(patientNumber, setLoginAttempts);
         },
         resetLoginAttempts: function (patientNumber, onSuccess, onError) {
             var sql = 'update Patient set LoginAttempts = ? where PatientNumber=?';
@@ -353,7 +291,7 @@ var patientController = (function () {
             function securityAnswerCallback(tx, rows) {
                 //should this be -== 1 ?? todo:
                 if (rows.length > 0) {
-                    patientController.setCurrentPatient(new Patient(rows[0]));
+                    currentPatientObject = new Patient(rows[0]);
 
                     if (typeof onSuccess == 'function') {
                         onSuccess();
@@ -441,107 +379,6 @@ var patientController = (function () {
             var pars = ['true', id];
 
             dbController.executeSql(sql, pars, onSuccess, onError);
-        },
-        syncQuestionnaires: function (patientId, onSuccess, onError) {
-            function doOnSuccess() {
-                if (typeof onSuccess == 'function') {
-                    onSuccess();
-                }
-            }
-
-            //check connectivity
-            if (!serviceController.connected()) {
-                doOnSuccess();
-            }
-
-            function processQuestionnaires(data) {
-                var sqlCommands = [];
-                var pars = [];
-
-                function createObject(e) {
-                    return {
-                        Guid: e.Guid,
-                        //Id: e.Id,
-                        PatientNumber: e.PatientNumber,
-                        Date: e.Date,
-                        VisitId: e.VisitId,
-                        QuestionnaireName: e.EDiaryQuestionnaireName,
-                        Status: e.Status,
-                        Source: e.Source,
-                        Started: e.Started,
-                        Completed: e.Completed,
-                        TransmitDate: e.Transmitted
-                    };
-                }
-
-                for (var i = 0; i < data.length; i++) {
-                    var entry = data[i];
-                    //check each patient to db
-                    var entryObject = createObject(entry);
-                    sqlCommands.push(dbController.getInsertUpdateSql(entryObject, 'EDiary'));
-                    pars.push(dbController.getInsertUpdateParameters(entryObject));
-                }
-
-                dbController.executeSqlStatements(sqlCommands, pars, doOnSuccess);
-            }
-
-            /*
-            Answers: Array[8]
-            Completed: "2015-11-17T20:47:38.846+00:00"
-            Date: "2015-11-17T00:00:00"
-            EDiaryPatientId: 8
-            EDiaryQuestionnaireName: "Daily_Diary"
-            Guid: "c174bd41-2b31-d01f-fc82-299e4e83ce65"
-            Id: 7
-            PatientNumber: null
-            SiteId: null
-            Source: "BYOD      "
-            Started: "2015-11-17T20:47:26.715+00:00"
-            Status: "Saved"
-            Transmitted: "2015-11-17T15:53:50.0422015-05:00"
-            */
-
-            serviceCalls.syncQuestionnaires(patientId, processQuestionnaires, onError);
-        },
-        getAllPatients: function (onSuccess, onFail) {
-            var sql = 'select * from Patient order by EnrolledId';
-            var pars = [];
-
-            dbController.executeSql(sql, pars, onSuccess, onFail)
-        },
-        inloadPatients: function (sitepatients, onSuccess, onFail) {
-            var sqlCommands = [];
-            var pars = [];
-
-            function createObject(e) {
-                return new Patient({
-                    Id: e.Id,
-                    EnrolledId: e.EnrolledId,
-                    PatientNumber: e.EnrolledId, //TODO: this may not be correct!!!
-                    Pin: e.Pin,
-                    IsTempPin: e.IsTempPin,
-                    PatientGender: e.PatientGender,
-                    PatientStatusTypeId: e.PatientStatusTypeId,
-                    SecurityAnswer: e.SecurityAnswer,
-                    LoginAttempts: e.LoginAttempts,
-                    EnrolledDate: e.EnrolledDate,
-                    IsTrainingComplete: e.IsTrainingComplete,
-                    SiteId: e.SiteId
-                });
-            }
-
-            for (var i = 0; i < sitepatients.length; i++) {
-                var siteObject = sitepatients[i];
-                var siteId = siteObject.SiteId;
-                for (var j = 0; j < siteObject.Patients.length; j++) {
-                    //check each patient to db
-                    var patientObject = createObject(siteObject.Patients[j]);
-                    sqlCommands.push(dbController.getInsertUpdateSql(patientObject, 'Patient'));
-                    pars.push(dbController.getInsertUpdateParameters(patientObject));
-                }
-            }
-
-            dbController.executeSqlStatements(sqlCommands, pars, onSuccess, onFail);
         },
         encryptMD5: function (val) {
             return (CryptoJS.MD5(val + '') + '').toUpperCase()

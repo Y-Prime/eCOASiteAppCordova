@@ -22,7 +22,7 @@
         if (app.getSiteBasedMode()) {
             //do not change screen when the app is paused for scanner plugin
             if (screenController.getCurrentScreen() != "ScanMenu") {
-                screenController.changeScreen("UserLogin", "");
+                screenController.changeScreen("Login", "");
             }
         }
     };

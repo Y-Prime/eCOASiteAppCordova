@@ -4,6 +4,8 @@ Date: 			05Nov2015
 Created: 		J Osifchin
 Description: 	control for translations
 ***************************/
+var patientLanguage;
+
 var translationController = (function () {
     return {
         keys: {},
@@ -36,7 +38,6 @@ var translationController = (function () {
                 case "text":
                 case "password":
                 case "textarea":
-                case "number":
                     $(obj).attr("placeholder", translation);
                     break;
                 case "button":

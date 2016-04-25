@@ -1255,22 +1255,22 @@ li {
 .btn-login {
   display: inline-block;
   color: #303F57;
-  width: 330px;
+  width: 280px;
   background-image: linear-gradient(-180deg, #FFFFFF 0%, #F0F0F0 100%);
   box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.25);
   font-weight: bold;
-  padding-top: 30px; 
-  padding-right: 30px;
-  padding-bottom: 22px;
+  padding-top: 14px; 
+  padding-right: 20px;
+  padding-bottom: 14px;
   padding-left: 30px;
   margin: 10px;
   text-align: center; }
   .btn-login:hover, .btn-login:focus {
     background: white; }
   .btn-login:active {
-    width: 326px;
-    padding-top: 28px; 
-    padding-bottom: 20px;
+    width: 280px;
+    padding-top: 20px; 
+    padding-bottom: 14px;
     margin: 12px; }
   .btn-login.disabled {
     background-image: none;

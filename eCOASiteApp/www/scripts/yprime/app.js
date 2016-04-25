@@ -27,11 +27,8 @@ RELIES ON:
 
 
 var app = (function () {
-    return { 
-        // deviceready Event Handler
-        //
-        // The scope of 'this' is the event. In order to call the 'receivedEvent'
-        // function, we must explicitly call 'app.receivedEvent(...);'
+    return {
+        // Application Constructor
         initialize: function () {
             this.bindEvents();
         },
@@ -41,9 +38,6 @@ var app = (function () {
         // 'load', 'deviceready', 'offline', and 'online'.
         bindEvents: function () {
             document.addEventListener('deviceready', this.onDeviceReady, false);
-            document.addEventListener("resume", this.onDeviceResume, false);
-            document.addEventListener('pause', this.onDevicePause, false);
-            document.addEventListener("backbutton", function (e) { e.preventDefault(); }, false);
         },
         // deviceready Event Handler
         //
@@ -58,25 +52,9 @@ var app = (function () {
                 case "deviceready":
                     this.initDevice();
                     break;
-                case "devicepause":
-                    if (app.getSiteBasedMode()) {
-                        //do not change screen when the app is paused for scanner plugin
-                        if (screenController.getCurrentScreen() != "ScanMenu") {
-                            screenController.changeScreen("UserLogin", "");
-                        }
-                    }
-                    break;
-                case "deviceresume":
-                    break;
             }
 
             console.log('Received Event: ' + id);
-        },
-        onDevicePause: function () {
-            app.receivedEvent('devicepause');
-        },
-        onDeviceResume: function () {
-            app.receivedEvent('deviceresume');
         },
         initDevice: function () {
             app.writeLog('Initializing......');
@@ -93,13 +71,8 @@ var app = (function () {
             }
 
             function startApp() {
-                //(questionnaireName, visitNumber, skipSave, completedCallback, isTraining, exitScreen, exitTitle)
-                //debug - use this to debug custom questions!
-                //questionController.goToQuestion('WPAI', '3');
-                //$('.splash').slideUp('slow');
-                //return;
                 screenController.changeScreen(
-                    "UserLogin",
+                    "Login",
                     "",
                     "white-background",
                     null,
@@ -122,12 +95,6 @@ var app = (function () {
                 function syncDataSuccess() {
                     setTimeout(function () { fnLoadup(); }, 1);
                 }
-
-                //if (SKIPSYNC) {
-                //    //debug
-                //    syncDataSuccess();
-                //    return;
-                //}
 
                 //this needs to happen after the other callbacks complete. the transaction for adding to the db doesn't commit until all the callbacks are done.
                 app.syncVersionDataCheckDb(syncDataSuccess, syncDataSuccess);
@@ -236,8 +203,7 @@ var app = (function () {
 
         macAddressStorageParameter: 'MacAddressStorage',
         getMacAddress: function () {
-            return app.defaultMacAddress;
-            // return app.getSetting(app.macAddressStorageParameter);
+            return app.getSetting(app.macAddressStorageParameter);
         },
         setMacAddress: function (val) {
             app.setSetting(app.macAddressStorageParameter, val);
@@ -298,15 +264,7 @@ var app = (function () {
         },
         getSiteBasedMode: function () {
             //change this for diary
-            return true;
-        },
-        getVersionNumber: function () {
-            //return "1.0";
-            var result = "1.0";
-            /*if (typeof navigator.appInfo != 'undefined') {
-                result = navigator.appInfo.getVersion();
-            }*/
-            return result;
+            return false;
         },
         getDiaryDate: function () {
             return currentDiaryDate;

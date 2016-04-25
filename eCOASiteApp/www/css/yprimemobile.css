@@ -48,10 +48,10 @@ header, footer {
 }
 
 footer {
-    font-size: .9em;
+    font-size: .7em;
     position: absolute;
     bottom: 0px;
-    min-height: 1.6em;
+    min-height: 1.3em;
     width: 100%;
     text-align: center;
     /*line-height: 3.0em;*/

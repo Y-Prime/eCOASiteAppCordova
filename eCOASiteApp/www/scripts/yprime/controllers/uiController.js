@@ -23,24 +23,19 @@ var uiController = (function () {
 
             return input;
         },
-        createTableControl: function (rows, cols) {
-            var tbl = this.createControl("table");
-
-            var colCount = 0;
-            for (var rowCount = 0; rowCount < rows; rowCount++) {
-                var newRow = this.createControl("tr");
-                for (colCount = 0; colCount < cols; colCount++) {
-                    var newCell = this.createControl("td", { "rowIndex": rowCount, "colIndex": colCount });
-                    //$(newCell).text("Row: " + rowCount + "Col: " + colCount);
-                    newRow.appendChild(newCell);
-                }
-                tbl.appendChild(newRow);
-            }
-            return (tbl);
-        },
         encodeHTML: function (str) {
-            var html = str.replace('\n','<br/>');
+            var html = str.replace('\n', '<br/>');
             return html;
+        },
+        limitInputCharacters: function (obj, len) {
+            var val = obj.value + '';
+            if (typeof val != 'undefined' && (val.length >= len)) {
+                obj.value = val.substring(0, len);
+            }
+        },
+        validEmailAddress: function (emailAddress) {
+            var regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regEx.test(emailAddress);
         }
     };
 })();

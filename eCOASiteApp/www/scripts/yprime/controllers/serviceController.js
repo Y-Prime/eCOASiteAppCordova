@@ -9,7 +9,7 @@ Description: 	control to handle service posts
 
 var serviceController = (function () {
     return {
-        init: function () {            
+        init: function () {
             $.ajaxSetup({
                 cache: false,
                 crossDomain: true,
@@ -50,7 +50,7 @@ var serviceController = (function () {
                 data: JSON.stringify(data),
                 //dataType: "json",
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', serviceController.getAuthHeader(isSiteUser));
+                    xhr.setRequestHeader('Authorization', serviceController.getAuthHeader());
                 },
                 success: function (e) {
                     serviceController.ajaxSuccess(e, onSuccess);
@@ -69,7 +69,11 @@ var serviceController = (function () {
             app.setSetting((isSiteUser ? this.authHeaderKey : this.authPatientHeaderKey), auth);
         },
         getAuthHeader: function (isSiteUser) {
+            //return app.getSetting(this.authHeaderKey);
+            //var userid = '9999';
+            //var password = '1234';
             return app.getSetting(isSiteUser ? this.authHeaderKey : this.authPatientHeaderKey);
+            //return "Basic " + Base64.encode(userid + ":" + password);
         },
         ajaxSuccess: function (e, onSuccess) {
             serviceController.networkStop();
@@ -79,7 +83,7 @@ var serviceController = (function () {
         },
         ajaxError: function (xhr, status, error, onError) {
             serviceController.networkStop();
-            //app.alert(JSON.stringify(xhr) + status + error);
+            // app.alert(xhr + status + error);
             if (typeof onError == "function") {
                 onError(xhr, status, error);
             } else {
@@ -152,7 +156,6 @@ var serviceCalls = (function () {
         },
         getPatientFromAPI: function (patientId, pin, onSuccess, onFail) {
             var url = SERVER_URL + 'api/patient/login';
-
             serviceController.setAuthHeader(patientId, pin, false);
             this.baseServiceCall(url, 'GET', null, false, onSuccess, onFail);
 
@@ -185,11 +188,55 @@ var serviceCalls = (function () {
         },
         checkForPatientDeviceUpdate: function (patientNumber, deviceId, onSuccess, onFail) {
             var url = SERVER_URL + 'api/Diary/CheckForPatientDeviceUpdate';
-            this.baseServiceCall(url, 'POST', { PatientNumber: patientNumber, DeviceId: deviceId }, true, onSuccess, onFail);
-        },
-        checkForDrugKitValidity: function (patientNumber, drugKitNumber, scanType, scanTime,onSuccess, onFail) {
-            var url = SERVER_URL + 'api/DrugKit/CheckValidity';
-            this.baseServiceCall(url, 'POST', { PatientId: patientNumber, DrugKitNumber: drugKitNumber , ScanType: scanType, ScanTime: scanTime }, true, onSuccess, onFail);
+            this.baseServiceCall(url, 'POST', {  PatientNumber: patientNumber, DeviceId: deviceId }, true, onSuccess, onFail);
         }
     };
 })();
+
+
+//function ajaxCall(url, callback, error) {
+//    var xhr;
+
+//    if (typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
+//    else {
+//        var versions = ["MSXML2.XmlHttp.5.0",
+//                        "MSXML2.XmlHttp.4.0",
+//                        "MSXML2.XmlHttp.3.0",
+//                        "MSXML2.XmlHttp.2.0",
+//                        "Microsoft.XmlHttp"]
+
+//        for (var i = 0, len = versions.length; i < len; i++) {
+//            try {
+//                xhr = new ActiveXObject(versions[i]);
+//                break;
+//            }
+//            catch (e) { }
+//        } // end for
+//    }
+
+//    xhr.onreadystatechange = ensureReadiness;
+
+//    function ensureReadiness() {
+//        if (xhr.readyState < 4) {
+//            return;
+//        }
+
+//        if (xhr.status !== 200) {
+//            return;
+//        }
+
+//        // all is well  
+//        if (xhr.readyState === 4) {
+//            callback(xhr);
+//        }
+//    }
+
+
+//    xhr.open('GET', url, true);
+//    xhr.withCredentials = true;
+//    xhr.setRequestHeader('Origin', 'http://localhost');
+//    xhr.setRequestHeader('Authorization', 'Basic MTAwMDEwMDE6MTIzNA==');
+//    //xhr.setRequestHeader('Access-Control-Allow-Origin','*');
+
+//    xhr.send('');
+//}

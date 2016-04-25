@@ -4,7 +4,7 @@
 // Close app
 function closeApp() {
     'use strict';
-    if (typeof navigator.app == 'undefined') {
+    if (desktopMode === true) {
         window.close();
     } else {
         navigator.app.exitApp();
@@ -45,8 +45,10 @@ function alertDismissed() {
 // PhoneGap Dialog Alert 
 function pgAlert(message, callback, title, button) {
     'use strict';
+    // callback = alertDismissed;
     if (typeof navigator.notification != "undefined") {
-          navigator.notification.alert(
+        //if (desktopMode === false) {
+        navigator.notification.alert(
             message,    // messages
             callback,   // callback
             title,      // title
@@ -60,6 +62,7 @@ function pgAlert(message, callback, title, button) {
 function pgConfirm(message, callback, title, buttons) {
     'use strict';
     if (typeof navigator.notification != "undefined") {
+        //if (desktopMode === false) {
         navigator.notification.confirm(
             message, // message
             callback,            // callback to invoke with index of button pressed
@@ -103,7 +106,7 @@ function jqmChangePage(destination) {
 // PhoneGap Connection Check
 function pgConnectCheck() {
     'use strict';
-    if (desktopMode === false && typeof navigator.notification != "undefined") {
+    if (typeof navigator.notification != "undefined") {
         if (navigator.connection.type === Connection.NONE) {
             return false;
         } else {
@@ -124,9 +127,9 @@ function getCurrentDate() {
 
 function arrayContains(arr, val) {
     var result = false;
-    
+
     var len = arr.length;
-    for (var i = 0; i < len; i++){
+    for (var i = 0; i < len; i++) {
         if (arr[i] == val) {
             result = true;
             break;
@@ -134,13 +137,6 @@ function arrayContains(arr, val) {
     }
 
     return result;
-}
-
-function reverse(s) {
-    var o = [];
-    for (var i = 0, len = s.length; i <= len; i++)
-        o.push(s.charAt(len - i));
-    return o.join('');
 }
 
 function getObjectPropertyCount(obj) {
